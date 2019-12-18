@@ -29,7 +29,10 @@ for prov, points in provices_point.items():
     lat = points.get('lat')
     lon = points.get('lon')
     lon, lat = millerToXY(lon, lat)
+    print('-----------------')
+    print(prov)
     points = np.dstack((lon, lat))[0]
     cross_point_list = gen_cross_point(line, points)
-    if not cross_point_list:
-        print(cross_point_list)
+    interaction_points = cross_point_list.bounds
+    if interaction_points:
+        print(interaction_points)

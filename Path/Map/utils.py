@@ -87,4 +87,4 @@ def gen_cross_point(line, polygen):
     """
     line = LineString(line)
     polygen = LineString(polygen)
-    return polygen.intersection(line) 
+    return line.intersection(polygen) 
