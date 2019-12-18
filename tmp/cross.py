@@ -27,9 +27,13 @@ for i in range(nLen-1):
             res['y'].append(0)
     
     if np.dot(y[i],y[i+1]) < 0:# %一定有交点，用一次插值
-        yy = np.dot(abs(y[i]) * y_line[i+1] + abs(y[i+1])*y_line[i], 1/(abs(y[i+1])+abs(y[i])))
-        res['x'].append((yy-500)/0.9)
-        res['y'].append(yy)
+        res['x'].append(x_line[i])
+        res['y'].append(y_line[i])
+        res['x'].append(x_line[i+1])
+        res['y'].append(y_line[i+1])
+        # yy = np.dot(abs(y[i]) * y_line[i+1] + abs(y[i+1])*y_line[i], 1/(abs(y[i+1])+abs(y[i])))
+        # res['x'].append((yy-500)/0.9)
+        # res['y'].append(yy)
 
 print(res['x'])
 print(res['y'])
