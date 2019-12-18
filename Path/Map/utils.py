@@ -64,3 +64,7 @@ def is_in_province(provinces_point, province, point):
     points = np.dstack((lon, lat))[0]
     boarder = path.Path(points)
     return boarder.contains_points([point])
+
+
+def gen_cross_point(start, end):
+    pass 
