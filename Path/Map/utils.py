@@ -71,7 +71,11 @@ def gen_line(start, end):
     x_end, y_end = end 
     k = (y_end - y_start) / (x_end - x_start)
     # 暂时设为 1000个点，后面根据长度调整
-    x = np.arange(x_start, x_end, 1000)
+    if x_start > x_end:
+        x = np.arange(x_start, x_end, -1000)
+    else:
+        x = np.arange(x_start, x_end, 1000)
+
     b = y_start - x_start*k 
     y = x * k + b 
     return x, y 

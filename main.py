@@ -20,15 +20,15 @@ for prov, points in provices_point.items():
 #     plt.plot(points['lon'],points['lat'],'o-')
 # plt.show()
 
-start = (32770658, 6998678)
-end = (44770658, 7798678)
+start = (33547259,7606963)
+end = (33121518, 6789409)
 x, y = gen_line(start, end)
 line = np.dstack((x, y))[0]
 
 for prov, points in provices_point.items():
     lat = points.get('lat')
     lon = points.get('lon')
-    lon, lat = millerToXY(lon,lat)
+    lon, lat = millerToXY(lon, lat)
     points = np.dstack((lon, lat))[0]
     cross_point_list = gen_cross_point(line, points)
     if not cross_point_list:
