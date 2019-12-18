@@ -18,7 +18,7 @@ def millerToXY (lon, lat):
     mill = 2.3
     x = lon*math.pi/180
     y = lat*math.pi/180
-    y = 1.25*np.log(np.tan(0.25*math.pi+0.4*y))
+    y = 1.25*np.log(np.tan(np.array(0.25*math.pi+0.4*y, dtype=float)))
     x = (W/2)+(W/(2*math.pi))*x
     y = (H/2)-(H/(2*mill))*y
     return x,y
