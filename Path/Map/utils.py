@@ -2,6 +2,7 @@ import os
 import numpy as np
 from matplotlib import path
 import math
+from shapely.geometry import LineString
 
 
 def load_province():
@@ -65,6 +66,21 @@ def is_in_province(provinces_point, province, point):
     boarder = path.Path(points)
     return boarder.contains_points([point])
 
+def gen_line(start, end):
+    x_start, y_start = start  
+    x_end, y_end = end 
+    k = (y_end - y_start) / (x_end - x_start)
+    # 暂时设为 1000个点，后面根据长度调整
+    x = np.arange(x_start, x_end, 1000)
+    b = y_start - x_start*k 
+    y = x * k + b 
+    return x, y 
 
-def gen_cross_point(start, end):
-    pass 
+def gen_cross_point(line, polygen):
+    """
+    line: list: [(x, y)]
+    polygen: list: [(x, y)]
+    """
+    line = LineString(line)
+    polygen = LineString(polygen)
+    return polygen.intersection(line) 

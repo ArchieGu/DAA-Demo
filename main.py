@@ -1,6 +1,13 @@
-from Path.Map.utils import load_province, is_in_province,load_specific_province
+from Path.Map.utils import (
+    load_province, 
+    is_in_province,
+    load_specific_province,
+    millerToXY,
+)
 import numpy as np
 import matplotlib.pyplot as plt
+
+from Path.Map.utils import gen_cross_point, gen_line
 
 provices_point = load_province()
 '''
@@ -9,6 +16,20 @@ for prov, points in provices_point.items():
     if is_in_province(provices_point, prov, point):
         print('point in province: {}'.format(prov))
 '''
-for prov,points in provices_point.items():
-    plt.plot(points['lon'],points['lat'],'o-')
-plt.show()
+# for prov,points in provices_point.items():
+#     plt.plot(points['lon'],points['lat'],'o-')
+# plt.show()
+
+start = (32770658, 6998678)
+end = (44770658, 7798678)
+x, y = gen_line(start, end)
+line = np.dstack((x, y))[0]
+
+for prov, points in provices_point.items():
+    lat = points.get('lat')
+    lon = points.get('lon')
+    lon, lat = millerToXY(lon,lat)
+    points = np.dstack((lon, lat))[0]
+    cross_point_list = gen_cross_point(line, points)
+    if not cross_point_list:
+        print(cross_point_list)
