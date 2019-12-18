@@ -13,9 +13,7 @@ y_start = 7606963
 y_end = 6789409
 
 k = (y_end - y_start)/(x_end-x_start)
-print(k)
 x_line =np.arange(x_start, x_end, -1000)
-print(x_line)
 b = y_start-x_start*k
 y_line = x_line * k +b
 
@@ -33,7 +31,7 @@ for i in range(nLen-1):
             yzero[i+1]=0
     elif np.dot(y[i],y[i+1]) < 0:# %一定有交点，用一次插值
         yzero[i] = np.dot(abs(y[i]) * y_line[i+1] + abs(y[i+1])*y_line[i], 1/(abs(y[i+1])+abs(y[i])))
-        xzero[i] = (yzero[i]-500)/0.9
+        xzero[i] = (yzero[i]-b)/k
     else:
         pass            
 

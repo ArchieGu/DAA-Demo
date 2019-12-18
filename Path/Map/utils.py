@@ -24,7 +24,23 @@ def load_province():
         provinces_point[province] = pos 
 
     return provinces_point
-    
+
+def load_specific_province():
+    """加载省的边界数据点"""
+    provinces_point = dict()
+    for f_name in os.listdir('china'):
+        if not f_name.endswith('.txt'):
+            continue
+        f_path = os.path.join('china', f_name)
+        province = f_name.split('.')[0]
+        data = np.loadtxt(f_path) 
+        data = np.reshape(data,(-1,2))
+
+        lon = data[:,:1]
+        lat = data[:,1:2]
+
+    return lon, lat
+
 def millerToXY (lon, lat):
     """经纬度转换为平面点"""
     L = 6381372*math.pi*2
