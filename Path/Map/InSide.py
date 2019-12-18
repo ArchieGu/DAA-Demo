@@ -27,18 +27,20 @@ def millerToXY (lon, lat):
     x = (W/2)+(W/(2*math.pi))*x
     y = (H/2)-(H/(2*mill))*y
     return x,y
+
 '''
 x, y = millerToXY(ShangHai_Lon,ShangHai_Lat)
 ShangHai = np.hstack((x,y))
 boarder = path.Path(ShangHai)
 print(boarder.contains_points([(36780058,7395678)]))
 '''
+
 for i in range(len(Lon)):
     x, y = millerToXY(Lon[i],Lat[i])
     province = np.hstack((x,y))
     boarder = path.Path(province)
-    if boarder.contains_points([(36770658,7398678)]):
-        print('Point is in %s', Provinces[i])
+    if boarder.contains_points([(33121518,6789409)]):
+        print('Point is in', Provinces[i])
         break
     else:
         print('Point is not in', Provinces[i])
