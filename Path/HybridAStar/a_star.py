@@ -12,8 +12,9 @@ import math
 import heapq
 import matplotlib.pyplot as plt
 import sys
-sys.path.append("../Map/")
-from Map import xy_coordinate
+
+from Path.Map.Map import xy_coordinate
+
 show_animation = False
 
 
