@@ -3,15 +3,26 @@ from Path.Map.utils import (
     is_in_province,
     load_specific_province,
     millerToXY,
+    get_random_point_in_polygon,
+    gen_cross_point,
+    gen_line
 )
-
+from shapely.geometry import Polygon, Point
 import numpy as np
 import matplotlib.pyplot as plt
 
-from Path.Map.utils import gen_cross_point, gen_line
-
 def main():
 
+    data1 = load_specific_province('北京')
+    data2 = load_specific_province('上海')
+    p = Polygon(data1)
+    point_in_poly = str(get_random_point_in_polygon(p))[7:-1]
+    point_start = [float(point_in_poly.split(' ')[0]),float(point_in_poly.split(' ')[1])]
+    point_start = np.dstack(millerToXY(point_start[0],point_start[1]))
+    print(point_start[0][0][0])
+    
+    
+    '''
     prov_inter_points = {}
     point_start = (32770658,6998678)
     point_end = (33121518, 6789409)
@@ -40,7 +51,7 @@ def main():
             prov_inter_points[prov] = interaction_points
             print(interaction_points)
     print(prov_inter_points)
-
+'''
 if __name__ == '__main__':
     main()
 

@@ -1,11 +1,10 @@
 import os 
-import math
-import random 
-from shapely.geometry import LineString
 import numpy as np
 from matplotlib import path
-
-
+import math
+from shapely.geometry import LineString
+from shapely.geometry import Polygon, Point
+import random
 
 def load_province():
     """加载省的边界数据点"""
@@ -28,21 +27,17 @@ def load_province():
 
     return provinces_point
 
-def load_specific_province():
+def load_specific_province(ProvinceName):
     """加载省的边界数据点"""
     provinces_point = dict()
     for f_name in os.listdir('china'):
-        if not f_name.endswith('.txt'):
-            continue
-        f_path = os.path.join('china', f_name)
-        province = f_name.split('.')[0]
-        data = np.loadtxt(f_path) 
-        data = np.reshape(data,(-1,2))
+        if f_name == ProvinceName+'.txt':
+            f_path = os.path.join('china', f_name)
+            province = f_name.split('.')[0]
+            data = np.loadtxt(f_path) 
+            data = np.reshape(data,(-1,2))
 
-        lon = data[:,:1]
-        lat = data[:,1:2]
-
-    return lon, lat
+    return data
 
 def millerToXY (lon, lat):
     """经纬度转换为平面点"""
@@ -89,8 +84,14 @@ def gen_cross_point(line, polygen):
     """
     line = LineString(line)
     polygen = LineString(polygen)
-    return line.intersection(polygen) 
+    return line.intersection(polygen)
 
+def get_random_point_in_polygon(poly):
+    minx, miny, maxx, maxy = poly.bounds
+    while True:
+        p = Point(random.uniform(minx, maxx), random.uniform(miny, maxy))
+        if poly.contains(p):
+            return p 
 
 def gen_random_province():
     """
