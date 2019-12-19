@@ -31,8 +31,6 @@ def main():
     print(prov_end, point_end)
 
     prov_inter_points = {}
-    #point_start = (32770658,6998678)
-    #point_end = (33121518, 6789409)
 
     provices_point = load_province()
     for prov, points in provices_point.items():

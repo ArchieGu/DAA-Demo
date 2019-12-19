@@ -35,10 +35,9 @@ for i in range(1,14):
 
 for i in range(1,14):
     Lon = np.asarray(Test['POS'+str(i)+'Lon'])
-    Lon = np.reshape(Lon,(-1,1))
     Lat = np.asarray(Test['POS'+str(i)+'Lat'])
-    Lat = np.reshape(Lat,(-1,1))
     x, y = millerToXY(Lon,Lat)
     Test['POS'+str(i)+'Lon'] = pd.DataFrame(x)
     Test['POS'+str(i)+'Lat'] = pd.DataFrame(y)
-print(Test['POS1Lon'])
+print(Test.head(2))
+Test.to_csv('pos_mod.csv',mode='w',index=False)
