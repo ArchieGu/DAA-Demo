@@ -5,6 +5,7 @@ import math
 from shapely.geometry import LineString
 from shapely.geometry import Polygon, Point
 import random
+import requests 
 
 def load_province():
     """加载省的边界数据点"""
@@ -106,3 +107,26 @@ def gen_random_province():
         provinces.append(province)
 
     return random.choice(provinces)
+
+def calculate_path(data):
+    """
+    根据data计算路径，可以供本地调用，server 也主要调用它计算
+    """
+    return []
+
+    
+def get_path(data, host, port):
+    """
+    根据发送的数据获取路径数据
+    """
+    try:
+        return http_post(data, host, port)
+    except:
+        raise Exception("Error: get path failed, host: {}, port: {}".format(host, port))
+    
+
+def http_post(data, host, port):
+    path = 'cal_path'
+    url = 'http://{}:{}/{}'.format(host, port, path)
+    r = requests.post(url, json=data)
+    return r.json() 
