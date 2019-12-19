@@ -7,6 +7,8 @@ from shapely.geometry import Polygon, Point
 import random
 import requests 
 
+from config import cal_nodes
+
 def load_province():
     """加载省的边界数据点"""
     provinces_point = dict()
@@ -122,6 +124,13 @@ def get_path(data, host, port):
     data: {'province': '四川', 'start': (104, 30), 'end': (108, 33)}
     """
     try:
+        prov = data.get('province')
+        node = cal_nodes.get(prov)
+        if not node:
+            node = cal_nodes.get('default')
+        host = node.get('host')
+        port = node.get('port')
+        
         return http_post(data, host, port)
     except:
         raise Exception("Error: get path failed, host: {}, port: {}".format(host, port))
