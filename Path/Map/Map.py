@@ -12,9 +12,9 @@ boarder_coordinate = []
 lonlat_coordinate = []
 
 Test = pd.read_csv('pos_mod.csv', index_col = 0)
-print(Test.head(2))
-print(Test.loc['上海/虹桥'])
-
+Ob = Test.loc['万州/五桥']
+ox = np.array(Ob[0:26:2])
+oy = np.array(Ob[1:26:2])
 '''
 prov_airp = {'上海':'上海/虹桥','上海/浦东';'北京':'北京/首都';}    
 
