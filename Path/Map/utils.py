@@ -1,8 +1,10 @@
 import os 
+import math
+import random 
+from shapely.geometry import LineString
 import numpy as np
 from matplotlib import path
-import math
-from shapely.geometry import LineString
+
 
 
 def load_province():
@@ -88,3 +90,18 @@ def gen_cross_point(line, polygen):
     line = LineString(line)
     polygen = LineString(polygen)
     return line.intersection(polygen) 
+
+
+def gen_random_province():
+    """
+    返回随机的中文省份名，比如四川。
+    省份集合根据 china 包获得。
+    """
+    provinces = list()
+    for f_name in os.listdir('china'):
+        if not f_name.endswith('.txt'):
+            continue
+        province = f_name.split('.')[0]
+        provinces.append(province)
+
+    return random.choice(provinces)
