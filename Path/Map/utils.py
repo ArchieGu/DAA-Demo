@@ -110,14 +110,16 @@ def gen_random_province():
 
 def calculate_path(data):
     """
-    根据data计算路径，可以供本地调用，server 也主要调用它计算
+    根据data计算路径，可以供本地调用，server 也主要调用它计算.
+    data: {'province': '四川', 'start': (104, 30), 'end': (108, 33)}
     """
     return []
 
-    
+
 def get_path(data, host, port):
     """
     根据发送的数据获取路径数据
+    data: {'province': '四川', 'start': (104, 30), 'end': (108, 33)}
     """
     try:
         return http_post(data, host, port)
