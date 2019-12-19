@@ -2,7 +2,6 @@ import os
 from PIL import Image
 
 
-
 def rotate(path, outdir):
     out_dir = './DAA切图/'+outdir
     if outdir not in os.listdir('./DAA切图'):
