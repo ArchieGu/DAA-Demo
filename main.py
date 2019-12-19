@@ -5,27 +5,34 @@ from Path.Map.utils import (
     millerToXY,
     get_random_point_in_polygon,
     gen_cross_point,
-    gen_line
+    gen_line,
+    gen_random_province
 )
 from shapely.geometry import Polygon, Point
 import numpy as np
 import matplotlib.pyplot as plt
 
-def main():
+def gen_start_end_point():
+    prov = gen_random_province()
+    assert prov!= ""
 
-    data1 = load_specific_province('北京')
-    data2 = load_specific_province('上海')
-    p = Polygon(data1)
+    polygon = load_specific_province(prov)
+    p = Polygon(polygon)
     point_in_poly = str(get_random_point_in_polygon(p))[7:-1]
-    point_start = [float(point_in_poly.split(' ')[0]),float(point_in_poly.split(' ')[1])]
-    point_start = np.dstack(millerToXY(point_start[0],point_start[1]))
-    print(point_start[0][0][0])
-    
-    
-    '''
+    point = [float(point_in_poly.split(' ')[0]),float(point_in_poly.split(' ')[1])]
+    point = millerToXY(point[0],point[1])
+    return prov, point
+
+def main():
+    prov_start, point_start = gen_start_end_point()
+    print(prov_start,point_start)
+
+    prov_end, point_end = gen_start_end_point()
+    print(prov_end, point_end)
+
     prov_inter_points = {}
-    point_start = (32770658,6998678)
-    point_end = (33121518, 6789409)
+    #point_start = (32770658,6998678)
+    #point_end = (33121518, 6789409)
 
     provices_point = load_province()
     for prov, points in provices_point.items():
@@ -51,7 +58,7 @@ def main():
             prov_inter_points[prov] = interaction_points
             print(interaction_points)
     print(prov_inter_points)
-'''
+
 if __name__ == '__main__':
     main()
 
