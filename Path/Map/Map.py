@@ -11,11 +11,13 @@ xy_coordinate = [] # XY cordinate after conversion
 boarder_coordinate = []
 lonlat_coordinate = []
 
-Test = pd.read_csv('pos_mod.csv')
+Test = pd.read_csv('pos_mod.csv', index_col = 0)
 print(Test.head(2))
+print(Test.loc['上海/虹桥'])
 
-    
 '''
+prov_airp = {'上海':'上海/虹桥','上海/浦东';'北京':'北京/首都';}    
+
 ox_all, oy_all = [], []
 for lenth in range(0,int(len(xy_coordinate)/13)):
     temp = np.array(xy_coordinate[lenth*13:lenth*13+13])

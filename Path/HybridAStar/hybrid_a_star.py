@@ -22,7 +22,6 @@ try:
     from a_star import dp_planning  # , calc_obstacle_map
     import reeds_shepp_path_planning as rs
     from uav import move, check_uav_collision, MAX_STEER, WB, plot_uav
-    from Map import xy_coordinate, millerToLonLat,lonlat_coordinate,ox_all,oy_all
 except:
     raise
 show_animation = True
@@ -407,6 +406,7 @@ def calc_index(node, c):
     return ind
 
 def main():
+    '''
     start_time = time.clock()
     print("Start Hybrid A* planning")
     minx = min(ox_all) + 4000
@@ -462,6 +462,6 @@ def main():
     end_time = time.clock()
     print(end_time-start_time)
     plt.show()
-    
+    '''
 if __name__ == '__main__':
     main()
