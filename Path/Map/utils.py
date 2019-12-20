@@ -39,7 +39,7 @@ def load_specific_province(ProvinceName):
             province = f_name.split('.')[0]
             data = np.loadtxt(f_path) 
             data = np.reshape(data,(-1,2))
-
+            
     return data
 
 def millerToXY (lon, lat):

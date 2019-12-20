@@ -13,8 +13,8 @@ lonlat_coordinate = []
 def get_obstacles(airportName):
     Test = pd.read_csv('Path/Map/pos_mod.csv', index_col = 0)
     Ob = Test.loc[airportName]
-    ox = Ob.values[0:26:2]
-    oy = Ob.values[1:26:2]
+    ox = Ob.values[0:26:2].tolist()
+    oy = Ob.values[1:26:2].tolist()
     return ox,oy
 
 prov_airp = {'上海':['上海/虹桥','上海/浦东'],'北京':['北京/首都'],'四川':['稻城/亚丁','宁蒗/泸沽湖','成都/双流','攀枝花/保安营','宜宾/菜坝','西昌/青山','广元/盘龙','达州/河市'],

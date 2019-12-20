@@ -1,14 +1,16 @@
 """
-UAV model for Hybrid A* path planning
+Car model for Hybrid A* path planning
+author: Zheng Zh (@Zhengzh)
 """
+
 
 import matplotlib.pyplot as plt
 from math import sqrt, cos, sin, tan, pi
 
-WB = 13510  # rear to front wheel
-W = 35400  # width of uav
-LF = 10000  # distance from rear to vehicle front end
-LB = 25000  # distance from rear to vehicle back end
+WB = 150  # rear to front wheel
+W = 340  # width of uav
+LF = 75  # distance from rear to vehicle front end
+LB = 75  # distance from rear to vehicle back end
 MAX_STEER = 0.6  # [rad] maximum steering angle
 
 WBUBBLE_DIST = (LF - LB) / 2.0

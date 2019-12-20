@@ -5,16 +5,16 @@ Hybrid A* path planning
 author: Zheng Zh (@Zhengzh)
 
 """
-import math
-import numpy as np
-from Path.Map.Map import prov_airp,get_obstacles
-import matplotlib.pyplot as plt
-from scipy.spatial import ConvexHull, convex_hull_plot_2d
-import numpy as np
+
 import heapq
-
 import scipy.spatial
+import numpy as np
+import math
+import matplotlib.pyplot as plt
+import sys
 
+from Path.Map.Map import prov_airp,get_obstacles
+from scipy.spatial import ConvexHull, convex_hull_plot_2d
 try:
     from Path.HybridAStar.hybrid_a_star import *
     from Path.HybridAStar.a_star import dp_planning  # , calc_obstacle_map
@@ -26,11 +26,11 @@ except:
 
 PI = 3.1415926535898
 XY_GRID_RESOLUTION = 100000.0  # [corrdinate to km]
-YAW_GRID_RESOLUTION = np.deg2rad(15.0)  # [rad]
-MOTION_RESOLUTION = 5000  # [m] path interporate resolution
+YAW_GRID_RESOLUTION = np.deg2rad(10.0)  # [rad]
+MOTION_RESOLUTION = 2000  # [m] path interporate resolution
 N_STEER = 20.0  # number of steer command
 H_COST = 1.0
-VR = 500.0  # robot radius
+VR = 100.0  # robot radius
 
 SB_COST = 100.0  # switch back penalty cost
 BACK_COST = 500000.0  # backward penalty cost
@@ -119,10 +119,13 @@ class Config:
         oy.append(max_y_m)
 
         self.minx = round(min_x_m / xyreso)
+        print('minx:',self.minx)
         self.miny = round(min_y_m / xyreso)
+        print('miny:',self.miny)
         self.maxx = round(max_x_m / xyreso)
+        print('maxx:',self.maxx)
         self.maxy = round(max_y_m / xyreso)
-
+        print('maxy:',self.maxy)
         self.xw = round(self.maxx - self.minx)
         self.yw = round(self.maxy - self.miny)
 
@@ -288,8 +291,8 @@ def hybrid_a_star_planning(start, goal, ox, oy, xyreso, yawreso):
     xyreso: grid resolution [m]
     yawreso: yaw angle resolution [rad]
     """
-
     start[2], goal[2] = rs.pi_2_pi(start[2]), rs.pi_2_pi(goal[2])
+
     tox, toy = ox[:], oy[:]
     obkdtree = KDTree(np.vstack((tox, toy)).T)
     
@@ -297,6 +300,7 @@ def hybrid_a_star_planning(start, goal, ox, oy, xyreso, yawreso):
 
     nstart = Node(round(start[0] / xyreso), round(start[1] / xyreso), round(start[2] / yawreso),
                   True, [start[0]], [start[1]], [start[2]], [True], cost=0)
+    print('nstart.xind:',nstart.xind)              
     ngoal = Node(round(goal[0] / xyreso), round(goal[1] / xyreso), round(goal[2] / yawreso),
                  True, [goal[0]], [goal[1]], [goal[2]], [True])
 
@@ -392,36 +396,25 @@ def verify_index(node, c):
 
 
 def calc_index(node, c):
-    print("node.yawind:",node.yawind)
-    print("c.minyaw:",c.minyaw)
-    print("node.yind:",node.yind)
-    print("node.xind:",node.xind)
     ind = (node.yawind - c.minyaw) * c.xw * c.yw + \
         (node.yind - c.miny) * c.xw + (node.xind - c.minx)
-
     if ind <= 0:
         print("Error(calc_index):", ind)
-    return ind
 
 def hybrid_path_planning(point_start,point_end,province):
-    ox, oy = [], []
+    ox, oy = [],[]
     for airport in prov_airp[province]:
         ox.append(get_obstacles(airport)[0])
-        oy.append(get_obstacles(airport)[1])
-    ox.append(min(point_start[0],point_end[0])-5000)
-    oy.append(min(point_start[1],point_end[1])-5000)
-    ox.append(max(point_start[0],point_end[0])+5000)
-    oy.append(max(point_start[1],point_end[1])+5000)
-    ox = np.reshape(np.array(ox),(1,-1))
-    print(ox)
-    '''
-    degree = math.atan2( point_end[1]-point_start[1], point_end[0]-point_start[0] )*180/PI
+        oy.append(get_obstacles(airport)[1]) 
+    ox = np.array(ox).flatten().tolist()
+    oy = np.array(oy).flatten().tolist()
+
+
+    degree = math.atan2(point_end[1]- point_start[1], point_end[0]-point_start[0])*180/PI
+
     start = [point_start[0], point_start[1], degree]
     goal = [point_end[0], point_end[1], degree]
 
-    plt.plot(point_start[0],point_start[1],'o')
-    plt.plot(point_end[0],point_end[1],'o')
-    
     rs.plot_arrow(start[0], start[1], start[2], fc='g')
     rs.plot_arrow(goal[0], goal[1], goal[2])
 
@@ -437,6 +430,8 @@ def hybrid_path_planning(point_start,point_end,province):
     
     for ix, iy, iyaw in zip(x, y, yaw):
         plt.cla()
+        plt.plot(point_start[0],point_start[1],'o')
+        plt.plot(point_end[0],point_end[1],'o')
         plt.plot(ox, oy, ".k")
         plt.plot(x, y, "-r", label="Hybrid A* path",lw=2)
         plt.grid(True)
@@ -445,9 +440,6 @@ def hybrid_path_planning(point_start,point_end,province):
         plt.pause(0.0001)
 
     print(__file__ + " done!!")
-    end_time = time.clock()
-    print(end_time-start_time)
-    plt.show()
-'''
 
+    plt.show()
 

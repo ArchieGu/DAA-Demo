@@ -71,7 +71,6 @@ def main():
     for key in prov_inter_points:
         inter_start = prov_inter_points[key][0],prov_inter_points[key][1]
         inter_end = prov_inter_points[key][2],prov_inter_points[key][3]
-        print(key)
         hybrid_path_planning(inter_start,inter_end,key)
         break
 
