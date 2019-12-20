@@ -5,26 +5,24 @@ Hybrid A* path planning
 author: Zheng Zh (@Zhengzh)
 
 """
+import math
+import numpy as np
+from Path.Map.Map import prov_airp,get_obstacles
+import matplotlib.pyplot as plt
 from scipy.spatial import ConvexHull, convex_hull_plot_2d
 import numpy as np
 import heapq
+
 import scipy.spatial
-import numpy as np
-import math
-import matplotlib.pyplot as plt
-import sys
-import random
-import json
-import time
 
 try:
-    from a_star import dp_planning  # , calc_obstacle_map
-    import reeds_shepp_path_planning as rs
-    from uav import move, check_uav_collision, MAX_STEER, WB, plot_uav
-    from Map import ox, oy
+    from Path.HybridAStar.hybrid_a_star import *
+    from Path.HybridAStar.a_star import dp_planning  # , calc_obstacle_map
+    import Path.ReedsSheppPath.reeds_shepp_path_planning as rs
+    from Path.HybridAStar.uav import move, check_uav_collision, MAX_STEER, WB, plot_uav
+    from Path.Map.Map import *
 except:
     raise
-show_animation = True
 
 PI = 3.1415926535898
 XY_GRID_RESOLUTION = 100000.0  # [corrdinate to km]
@@ -405,36 +403,30 @@ def calc_index(node, c):
         print("Error(calc_index):", ind)
     return ind
 
-def main():
+def hybrid_path_planning(point_start,point_end,province):
+    ox, oy = [], []
+    for airport in prov_airp[province]:
+        ox.append(get_obstacles(airport)[0])
+        oy.append(get_obstacles(airport)[1])
+    ox.append(min(point_start[0],point_end[0])-5000)
+    oy.append(min(point_start[1],point_end[1])-5000)
+    ox.append(max(point_start[0],point_end[0])+5000)
+    oy.append(max(point_start[1],point_end[1])+5000)
+    ox = np.reshape(np.array(ox),(1,-1))
     print(ox)
-    print(oy)
     '''
-    start_time = time.clock()
-    print("Start Hybrid A* planning")
-    minx = min(ox_all) + 4000
-    maxx = max(ox_all) - 4000
-    miny = min(oy_all) + 5000
-    maxy = max(oy_all) - 15000
-    point_start = [random.uniform(minx,maxx), random.uniform(miny,maxy)]
-    point_goal = [random.uniform(minx,maxx), random.uniform(miny,maxy)]
-    
-    degree = math.atan2( point_goal[1]-point_start[1], point_goal[0]-point_start[0] )*180/PI
-    
+    degree = math.atan2( point_end[1]-point_start[1], point_end[0]-point_start[0] )*180/PI
     start = [point_start[0], point_start[1], degree]
-    goal = [point_goal[0], point_goal[1], degree]
+    goal = [point_end[0], point_end[1], degree]
 
     plt.plot(point_start[0],point_start[1],'o')
-    plt.plot(point_goal[0],point_goal[1],'o')
+    plt.plot(point_end[0],point_end[1],'o')
     
     rs.plot_arrow(start[0], start[1], start[2], fc='g')
     rs.plot_arrow(goal[0], goal[1], goal[2])
 
     plt.grid(True)
     plt.axis("equal")
-    obs_temp = []
-    
-
-
 
     path = hybrid_a_star_planning(
         start, goal, ox, oy, XY_GRID_RESOLUTION, YAW_GRID_RESOLUTION)
@@ -442,15 +434,7 @@ def main():
     x = path.xlist
     y = path.ylist
     yaw = path.yawlist
-    for i in range(len(x)):
-        millerToLonLat(x[i],y[i])
-    json_item = {}
-    json_item["name"] = "UAV Path"
-    json_item["path"] = lonlat_coordinate
-    #PathJson = json.dumps(json_item)
-    with open('path.json','w') as json_file:
-        json.dump(json_item,json_file)
-
+    
     for ix, iy, iyaw in zip(x, y, yaw):
         plt.cla()
         plt.plot(ox, oy, ".k")
@@ -464,6 +448,6 @@ def main():
     end_time = time.clock()
     print(end_time-start_time)
     plt.show()
-    '''
-if __name__ == '__main__':
-    main()
+'''
+
+

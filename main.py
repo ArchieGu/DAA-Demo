@@ -9,13 +9,24 @@ from Path.Map.utils import (
     gen_random_province
 )
 from shapely.geometry import Polygon, Point
-import numpy as np
 import matplotlib.pyplot as plt
+import math
+import random
+
+try:
+    from Path.HybridAStar.hybrid_a_star import *
+    from Path.HybridAStar.a_star import dp_planning  # , calc_obstacle_map
+    import Path.ReedsSheppPath.reeds_shepp_path_planning as rs
+    from Path.HybridAStar.uav import move, check_uav_collision, MAX_STEER, WB, plot_uav
+    from Path.Map.Map import *
+except:
+    raise
+
+
 
 def gen_start_end_point():
     prov = gen_random_province()
     assert prov!= ""
-
     polygon = load_specific_province(prov)
     p = Polygon(polygon)
     point_in_poly = str(get_random_point_in_polygon(p))[7:-1]
@@ -30,7 +41,7 @@ def main():
     prov_end, point_end = gen_start_end_point()
     print(prov_end, point_end)
 
-    prov_inter_points = {}
+    porv_inter = []
 
     provices_point = load_province()
     for prov, points in provices_point.items():
@@ -40,22 +51,30 @@ def main():
         if is_in_province(provices_point,prov,point_end):
             print('End point is in province: {}'.format(prov))
             end_prov = prov
-
+    
     x, y = gen_line(point_start, point_end)
     line = np.dstack((x, y))[0]
+    prov_inter_points = {}
     for prov, points in provices_point.items():
         lat = points.get('lat')
         lon = points.get('lon')
         lon, lat = millerToXY(lon, lat)
         print('-----------------')
         print(prov)
+        porv_inter.append(prov)
         points = np.dstack((lon, lat))[0]
         cross_point_list = gen_cross_point(line, points)
         interaction_points = cross_point_list.bounds
         if interaction_points:
             prov_inter_points[prov] = interaction_points
             print(interaction_points)
-    print(prov_inter_points)
+    for key in prov_inter_points:
+        inter_start = prov_inter_points[key][0],prov_inter_points[key][1]
+        inter_end = prov_inter_points[key][2],prov_inter_points[key][3]
+        print(key)
+        hybrid_path_planning(inter_start,inter_end,key)
+        break
+
 
 if __name__ == '__main__':
     main()

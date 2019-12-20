@@ -13,8 +13,7 @@ import heapq
 import matplotlib.pyplot as plt
 import sys
 
-from Path.Map.Map import xy_coordinate
-
+#from Path.Map import xy_coordinate
 show_animation = False
 
 
