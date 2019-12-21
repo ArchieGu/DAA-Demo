@@ -12,7 +12,7 @@ import numpy as np
 import math
 import matplotlib.pyplot as plt
 import sys
-
+from time import time
 from Path.Map.Map import prov_airp,get_obstacles
 from scipy.spatial import ConvexHull, convex_hull_plot_2d
 try:
@@ -26,7 +26,7 @@ except:
 
 PI = 3.1415926535898
 XY_GRID_RESOLUTION = 100000.0  # [corrdinate to km]
-YAW_GRID_RESOLUTION = np.deg2rad(10.0)  # [rad]
+YAW_GRID_RESOLUTION = np.deg2rad(15.0)  # [rad]
 MOTION_RESOLUTION = 2000  # [m] path interporate resolution
 N_STEER = 20.0  # number of steer command
 H_COST = 1.0
@@ -112,7 +112,7 @@ class Config:
         min_y_m = min(oy)
         max_x_m = max(ox)
         max_y_m = max(oy)
-
+ 
         ox.append(min_x_m)
         oy.append(min_y_m)
         ox.append(max_x_m)
@@ -401,45 +401,57 @@ def getEquidistantPoints(p1, p2, parts):
 
 def obstacles_process(ox,oy):
     coor_array = np.concatenate((ox,oy),axis=1)
+    extend_points_x,extend_points_y = [],[]
     for lenth in range(0,int(len(coor_array)/13)):
         temp = coor_array[lenth*13:lenth*13+13]
-        
+
         hull = ConvexHull(temp)
+        '''
         for simplex in hull.simplices:
             plt.plot(temp[simplex, 0], temp[simplex, 1], 'k')
-            #plt.plot(temp[hull.vertices,0], temp[hull.vertices,1], '.k')
-            #    
+            plt.plot(temp[hull.vertices,0], temp[hull.vertices,1], '.k')
+        '''    
         bound_points = np.array(temp[hull.vertices])
-        extend_points = []
+        
         for i in range(len(bound_points)-1):
-            temp_points = getEquidistantPoints(bound_points[i],bound_points[i+1],1000)
-            extend_points.append((list(temp_points))) 
-        temp_points = getEquidistantPoints(bound_points[0],bound_points[-1],1000)
-        extend_points.append(list(temp_points))
-        extend_points = np.array(extend_points)
-        return extend_points
+            temp_points_x , temp_points_y = getEquidistantPoints(bound_points[i],bound_points[i+1],1000)
+            extend_points_x.append(temp_points_x)
+            extend_points_y.append(temp_points_y) 
+        temp_points_x , temp_points_y = getEquidistantPoints(bound_points[0],bound_points[-1],1000)
+        extend_points_x.append(temp_points_x)
+        extend_points_y.append(temp_points_y) 
+    extend_points_x = np.array(extend_points_x)
+    extend_points_y = np.array(extend_points_y)
+    return extend_points_x,extend_points_y
                 
         
     
 def hybrid_path_planning(point_start,point_end,province):
+    start_time = time()
     ox, oy = [],[]
     for airport in prov_airp[province]:
         ox.append(get_obstacles(airport)[0])
         oy.append(get_obstacles(airport)[1]) 
     ox = np.reshape(ox,(-1,1))
     oy = np.reshape(oy,(-1,1))
-    extend_points = obstacles_process(ox,oy)
-    extend_points = np.reshape(extend_points,(-1,2))
-    print()
-    #ox = np.vstack((ox,extend_points[0]))
-    #print(ox)
-    #ox = np.array(ox).flatten()
-    #oy = np.array(oy).flatten()
+
+    extend_points_x, extend_points_y = obstacles_process(ox,oy)
+    extend_points_x = np.reshape(extend_points_x,(-1,1))
+    extend_points_y = np.reshape(extend_points_y,(-1,1))
     
+    ox = np.vstack((ox,extend_points_x)).flatten().tolist()
+    oy = np.vstack((oy,extend_points_y)).flatten().tolist()
 
+    minx_bound = min(min(ox),point_start[0],point_end[0])
+    miny_bound = min(min(oy),point_start[1],point_end[1])
+    maxx_bound = max(max(ox),point_start[0],point_end[0])
+    maxy_bound = max(max(oy),point_start[1],point_end[1])
 
+    ox.append(minx_bound-20000)
+    ox.append(maxx_bound+20000)
+    oy.append(miny_bound-5000)
+    oy.append(maxy_bound+5000)
 
-    '''
     degree = math.atan2(point_end[1]- point_start[1], point_end[0]-point_start[0])*180/PI
 
     start = [point_start[0], point_start[1], degree]
@@ -467,9 +479,9 @@ def hybrid_path_planning(point_start,point_end,province):
         plt.grid(True)
         plt.axis("equal")
         plot_uav(ix, iy, iyaw)
-        plt.pause(0.0001)
-
+        #plt.pause(0.0001)
+    
     print(__file__ + " done!!")
-
+    end_time = time()
+    print("Time:",end_time-start_time)
     plt.show()
-'''

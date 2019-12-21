@@ -140,7 +140,7 @@ def calc_obstacle_map(ox, oy, reso, vr):
     maxy = int(round(max(oy)))
     xwidth = int(round(maxx - minx))
     ywidth = int(round(maxy - miny))
-
+    
     # obstacle map generation
     obmap = [[False for i in range(int(ywidth))] for i in range(int(xwidth))]
     for ix in range(int(xwidth)):
@@ -157,7 +157,6 @@ def calc_obstacle_map(ox, oy, reso, vr):
 
 
 def calc_index(node, xwidth, xmin, ymin):
-    #print("calc_index:",(node.y - ymin) * xwidth + (node.x - xmin))
     return (node.y - ymin) * xwidth + (node.x - xmin)
 
 
