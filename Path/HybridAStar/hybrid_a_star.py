@@ -119,13 +119,9 @@ class Config:
         oy.append(max_y_m)
 
         self.minx = round(min_x_m / xyreso)
-        print('minx:',self.minx)
         self.miny = round(min_y_m / xyreso)
-        print('miny:',self.miny)
         self.maxx = round(max_x_m / xyreso)
-        print('maxx:',self.maxx)
         self.maxy = round(max_y_m / xyreso)
-        print('maxy:',self.maxy)
         self.xw = round(self.maxx - self.minx)
         self.yw = round(self.maxy - self.miny)
 
@@ -299,8 +295,7 @@ def hybrid_a_star_planning(start, goal, ox, oy, xyreso, yawreso):
     config = Config(tox, toy, xyreso, yawreso)
 
     nstart = Node(round(start[0] / xyreso), round(start[1] / xyreso), round(start[2] / yawreso),
-                  True, [start[0]], [start[1]], [start[2]], [True], cost=0)
-    print('nstart.xind:',nstart.xind)              
+                  True, [start[0]], [start[1]], [start[2]], [True], cost=0)            
     ngoal = Node(round(goal[0] / xyreso), round(goal[1] / xyreso), round(goal[2] / yawreso),
                  True, [goal[0]], [goal[1]], [goal[2]], [True])
 
@@ -385,7 +380,6 @@ def get_final_path(closed, ngoal, nstart, config):
     path = Path(rx, ry, ryaw, direction, finalcost)
     return path
 
-
 def verify_index(node, c):
     xind, yind = node.xind, node.yind
     if xind >= c.minx and xind <= c.maxx and yind >= c.miny \
@@ -401,15 +395,51 @@ def calc_index(node, c):
     if ind <= 0:
         print("Error(calc_index):", ind)
 
+def getEquidistantPoints(p1, p2, parts):
+    return np.linspace(p1[0], p2[0], parts+1),np.linspace(p1[1], p2[1], parts+1)
+    #return zip(np.linspace(p1[0], p2[0], parts+1), np.linspace(p1[1], p2[1], parts+1))
+
+def obstacles_process(ox,oy):
+    coor_array = np.concatenate((ox,oy),axis=1)
+    for lenth in range(0,int(len(coor_array)/13)):
+        temp = coor_array[lenth*13:lenth*13+13]
+        
+        hull = ConvexHull(temp)
+        for simplex in hull.simplices:
+            plt.plot(temp[simplex, 0], temp[simplex, 1], 'k')
+            #plt.plot(temp[hull.vertices,0], temp[hull.vertices,1], '.k')
+            #    
+        bound_points = np.array(temp[hull.vertices])
+        extend_points = []
+        for i in range(len(bound_points)-1):
+            temp_points = getEquidistantPoints(bound_points[i],bound_points[i+1],1000)
+            extend_points.append((list(temp_points))) 
+        temp_points = getEquidistantPoints(bound_points[0],bound_points[-1],1000)
+        extend_points.append(list(temp_points))
+        extend_points = np.array(extend_points)
+        return extend_points
+                
+        
+    
 def hybrid_path_planning(point_start,point_end,province):
     ox, oy = [],[]
     for airport in prov_airp[province]:
         ox.append(get_obstacles(airport)[0])
         oy.append(get_obstacles(airport)[1]) 
-    ox = np.array(ox).flatten().tolist()
-    oy = np.array(oy).flatten().tolist()
+    ox = np.reshape(ox,(-1,1))
+    oy = np.reshape(oy,(-1,1))
+    extend_points = obstacles_process(ox,oy)
+    extend_points = np.reshape(extend_points,(-1,2))
+    print()
+    #ox = np.vstack((ox,extend_points[0]))
+    #print(ox)
+    #ox = np.array(ox).flatten()
+    #oy = np.array(oy).flatten()
+    
 
 
+
+    '''
     degree = math.atan2(point_end[1]- point_start[1], point_end[0]-point_start[0])*180/PI
 
     start = [point_start[0], point_start[1], degree]
@@ -442,4 +472,4 @@ def hybrid_path_planning(point_start,point_end,province):
     print(__file__ + " done!!")
 
     plt.show()
-
+'''
