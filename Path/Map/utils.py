@@ -110,6 +110,16 @@ def gen_random_province():
 
     return random.choice(provinces)
 
+def gen_start_end_point():
+    prov = gen_random_province()
+    assert prov!= ""
+    polygon = load_specific_province(prov)
+    p = Polygon(polygon)
+    point_in_poly = str(get_random_point_in_polygon(p))[7:-1]
+    point = [float(point_in_poly.split(' ')[0]),float(point_in_poly.split(' ')[1])]
+    point = millerToXY(point[0],point[1])
+    return prov, point
+
 def calculate_path(data):
     """
     根据data计算路径，可以供本地调用，server 也主要调用它计算.

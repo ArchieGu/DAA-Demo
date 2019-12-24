@@ -15,6 +15,8 @@ import sys
 from time import time
 from Path.Map.Map import prov_airp,get_obstacles
 from scipy.spatial import ConvexHull, convex_hull_plot_2d
+from Path.Map.utils import load_specific_province, millerToXY
+
 try:
     from Path.HybridAStar.hybrid_a_star import *
     from Path.HybridAStar.a_star import dp_planning  # , calc_obstacle_map
@@ -30,7 +32,7 @@ YAW_GRID_RESOLUTION = np.deg2rad(15.0)  # [rad]
 MOTION_RESOLUTION = 2000  # [m] path interporate resolution
 N_STEER = 20.0  # number of steer command
 H_COST = 1.0
-VR = 500.0  # robot radius
+VR = 5000.0  # robot radius
 
 SB_COST = 100.0  # switch back penalty cost
 BACK_COST = 500000.0  # backward penalty cost
@@ -414,24 +416,35 @@ def obstacles_process(ox,oy):
         bound_points = np.array(temp[hull.vertices])
         
         for i in range(len(bound_points)-1):
-            temp_points_x , temp_points_y = getEquidistantPoints(bound_points[i],bound_points[i+1],1000)
+            temp_points_x , temp_points_y = getEquidistantPoints(bound_points[i],bound_points[i+1],2000)
             extend_points_x.append(temp_points_x)
             extend_points_y.append(temp_points_y) 
-        temp_points_x , temp_points_y = getEquidistantPoints(bound_points[0],bound_points[-1],1000)
+        temp_points_x , temp_points_y = getEquidistantPoints(bound_points[0],bound_points[-1],2000)
         extend_points_x.append(temp_points_x)
         extend_points_y.append(temp_points_y) 
     extend_points_x = np.array(extend_points_x)
     extend_points_y = np.array(extend_points_y)
     return extend_points_x,extend_points_y
-                
+
+def load_province_boarder(province):
+    province_points = load_specific_province(province)
+    prov_lon = province_points[:,:1]
+    prov_lat = province_points[:,1:2]
+    prov_lon, prov_lat = millerToXY(prov_lon,prov_lat)
+    return prov_lon, prov_lat
+
+
         
     
 def hybrid_path_planning(point_start,point_end,province):
     start_time = time()
     ox, oy = [],[]
-    for airport in prov_airp[province]:
-        ox.append(get_obstacles(airport)[0])
-        oy.append(get_obstacles(airport)[1]) 
+    if province not in prov_airp:
+        ox,oy = load_province_boarder(province)
+    else:
+        for airport in prov_airp[province]:
+            ox.append(get_obstacles(airport)[0])
+            oy.append(get_obstacles(airport)[1]) 
     ox = np.reshape(ox,(-1,1))
     oy = np.reshape(oy,(-1,1))
 
@@ -452,6 +465,7 @@ def hybrid_path_planning(point_start,point_end,province):
     oy.append(miny_bound-5000)
     oy.append(maxy_bound+5000)
 
+    prov_lon, prov_lat = load_province_boarder(province)
 
     degree = math.atan2(point_end[1]- point_start[1], point_end[0]-point_start[0])*180/PI
 
@@ -463,7 +477,7 @@ def hybrid_path_planning(point_start,point_end,province):
 
     plt.grid(True)
     plt.axis("equal")
-    print()
+    print("Planning")
     path = hybrid_a_star_planning(
         start, goal, ox, oy, XY_GRID_RESOLUTION, YAW_GRID_RESOLUTION)
 
@@ -475,6 +489,7 @@ def hybrid_path_planning(point_start,point_end,province):
         plt.cla()
         plt.plot(point_start[0],point_start[1],'o')
         plt.plot(point_end[0],point_end[1],'o')
+        plt.plot(prov_lon, prov_lat,'.k')
         plt.plot(ox, oy, ".k")
         plt.plot(x, y, "-r", label="Hybrid A* path",lw=2)
         plt.grid(True)
