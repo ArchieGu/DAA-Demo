@@ -33,9 +33,9 @@ def main():
     prov_end, point_end = gen_start_end_point()
     print(prov_end, point_end)
     '''
-    point_start = (32527246, 6808552)
-    point_end = (33121518,6789409)
-    prov_start = '内蒙古'
+    point_start = (33172400.000, 6903700.00)
+    point_end = (33111518.000000,6789409.0)
+    prov_start = '天津'
     prov_end = '北京'
     provices_point = load_province()
 
