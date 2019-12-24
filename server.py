@@ -27,6 +27,6 @@ def cal_path():
 
 if __name__ == '__main__':
     host = 'localhost'
-    port = 9099
+    port = 9001
     print('calculte node run: {}:{}'.format(host, port))
-    app.run(debug=True, port=9099)
+    app.run(debug=True, host=host, port=port)

@@ -471,12 +471,6 @@ def hybrid_path_planning(point_start,point_end,province):
 
     start = [point_start[0], point_start[1], degree]
     goal = [point_end[0], point_end[1], degree]
-
-    rs.plot_arrow(start[0], start[1], start[2], fc='g')
-    rs.plot_arrow(goal[0], goal[1], goal[2])
-
-    plt.grid(True)
-    plt.axis("equal")
     print("Planning")
     path = hybrid_a_star_planning(
         start, goal, ox, oy, XY_GRID_RESOLUTION, YAW_GRID_RESOLUTION)
@@ -484,20 +478,9 @@ def hybrid_path_planning(point_start,point_end,province):
     x = path.xlist
     y = path.ylist
     yaw = path.yawlist
-    
-    for ix, iy, iyaw in zip(x, y, yaw):
-        plt.cla()
-        plt.plot(point_start[0],point_start[1],'o')
-        plt.plot(point_end[0],point_end[1],'o')
-        plt.plot(prov_lon, prov_lat,'.k')
-        plt.plot(ox, oy, ".k")
-        plt.plot(x, y, "-r", label="Hybrid A* path",lw=2)
-        plt.grid(True)
-        plt.axis("equal")
-        plot_uav(ix, iy, iyaw)
-        #plt.pause(0.0001)
-    
-    print(__file__ + " done!!")
-    end_time = time()
-    print("Time:",end_time-start_time)
-    plt.show()
+
+    return {
+        'x': x,
+        'y': y,
+        'yaw': yaw
+    }

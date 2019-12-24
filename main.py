@@ -7,7 +7,8 @@ from Path.Map.utils import (
     gen_cross_point,
     gen_line,
     gen_random_province,
-    gen_start_end_point
+    gen_start_end_point,
+    get_path,
 )
 import numpy as np
 from shapely.geometry import Polygon, Point
@@ -78,7 +79,14 @@ def main():
             inter_end = prov_inter_points[key][2],prov_inter_points[key][3]
         print("-----------Just One Province Test-----------")
         print("Province:",key)
-        hybrid_path_planning(inter_start,inter_end,key)
+        data = {
+            'start': inter_start,
+            'end': inter_end,
+            'province': key
+        }
+        path = get_path(data)
+        print(path)
+
 
 if __name__ == '__main__':
     main()
