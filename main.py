@@ -85,7 +85,7 @@ def main():
             'province': key
         }
         path = get_path(data)
-        print(path)
+        print(path.get('data').get('x'))
 
 
 if __name__ == '__main__':
