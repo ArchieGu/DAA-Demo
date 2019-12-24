@@ -35,18 +35,9 @@ def main():
     '''
     point_start = (32527246, 6808552)
     point_end = (33121518,6789409)
+    prov_start = '内蒙古'
+    prov_end = '北京'
     provices_point = load_province()
-    
-    lon,lat = [],[]
-    for prov, points in provices_point.items():
-        lat = points.get('lat')
-        lon = points.get('lon')
-        lon,lat = millerToXY(lon,lat)
-        plt.plot(lon,lat)
-    x, y = gen_line(point_start, point_end)
-    plt.plot(x,y,'r-')
-    plt.show() 
-
 
     for prov, points in provices_point.items():
         if is_in_province(provices_point, prov, point_start):
@@ -67,20 +58,14 @@ def main():
         lon, lat = millerToXY(lon, lat)
         print('-----------------')
         print(prov)
-
         points = np.dstack((lon, lat))[0]
 
         cross_point_list = gen_cross_point(line, points)
         interaction_points = cross_point_list.bounds
         if interaction_points:
             prov_inter_points[prov] = interaction_points
-            prov_lon, prov_lat = load_province_boarder(prov)
-            plt.plot(prov_lon, prov_lat,'g')
             print(interaction_points)
-            plt.plot(interaction_points[0],interaction_points[1],'o')
-            plt.plot(interaction_points[2],interaction_points[3],'o')
-            plt.show()
-'''
+
     for key in prov_inter_points:
         if key == prov_start:
             inter_start = point_start[0],point_start[1]
@@ -94,8 +79,6 @@ def main():
         print("-----------Just One Province Test-----------")
         print("Province:",key)
         hybrid_path_planning(inter_start,inter_end,key)
-    '''
-
 
 if __name__ == '__main__':
     main()
