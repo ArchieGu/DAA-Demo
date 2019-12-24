@@ -26,12 +26,15 @@ except:
 
 
 def main():
+    '''
     prov_start, point_start = gen_start_end_point()
     print(prov_start,point_start)
 
     prov_end, point_end = gen_start_end_point()
     print(prov_end, point_end)
-    
+    '''
+    point_start = (32527246, 6808552)
+    point_end = (33121518,6789409)
     provices_point = load_province()
     
     lon,lat = [],[]
