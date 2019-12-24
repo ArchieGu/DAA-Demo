@@ -1,5 +1,6 @@
 import json 
 from flask import Flask, request, jsonify 
+import argparse
 
 from Path.Map.utils import calculate_path
 
@@ -26,7 +27,13 @@ def cal_path():
     
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--port',  type=int,
+                    help='an integer for the port')
+    # 解析参数步骤  
+    args = parser.parse_args()
+
     host = 'localhost'
-    port = 9001
+    port = args.port 
     print('calculte node run: {}:{}'.format(host, port))
     app.run(debug=True, host=host, port=port)

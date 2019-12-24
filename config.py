@@ -29,7 +29,7 @@ cal_nodes = {
     },
     '天津': {
         'host': 'localhost',
-        'port': 9001
+        'port': 9002
     },
     '宁夏': {
         'host': 'localhost',
