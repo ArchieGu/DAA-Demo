@@ -69,8 +69,15 @@ def main():
             prov_inter_points[prov] = interaction_points
             print(interaction_points)
     for key in prov_inter_points:
-        inter_start = prov_inter_points[key][0],prov_inter_points[key][1]
-        inter_end = prov_inter_points[key][2],prov_inter_points[key][3]
+        if key == prov_start:
+            inter_start = point_start[0],point_start[1]
+            inter_end = prov_inter_points[key][0],prov_inter_points[key][1]
+        elif key == prov_end:
+            inter_start = prov_inter_points[key][0],prov_inter_points[key][1]
+            inter_end = point_end[0],point_end[1]
+        else:
+            inter_start = prov_inter_points[key][0],prov_inter_points[key][1]
+            inter_end = prov_inter_points[key][2],prov_inter_points[key][3]
         hybrid_path_planning(inter_start,inter_end,key)
         break
 

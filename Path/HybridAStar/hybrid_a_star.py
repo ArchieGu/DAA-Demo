@@ -25,12 +25,12 @@ except:
     raise
 
 PI = 3.1415926535898
-XY_GRID_RESOLUTION = 100000.0  # [corrdinate to km]
+XY_GRID_RESOLUTION = 10000.0  # [corrdinate to km]
 YAW_GRID_RESOLUTION = np.deg2rad(15.0)  # [rad]
 MOTION_RESOLUTION = 2000  # [m] path interporate resolution
 N_STEER = 20.0  # number of steer command
 H_COST = 1.0
-VR = 100.0  # robot radius
+VR = 500.0  # robot radius
 
 SB_COST = 100.0  # switch back penalty cost
 BACK_COST = 500000.0  # backward penalty cost
@@ -452,6 +452,7 @@ def hybrid_path_planning(point_start,point_end,province):
     oy.append(miny_bound-5000)
     oy.append(maxy_bound+5000)
 
+
     degree = math.atan2(point_end[1]- point_start[1], point_end[0]-point_start[0])*180/PI
 
     start = [point_start[0], point_start[1], degree]
@@ -462,7 +463,7 @@ def hybrid_path_planning(point_start,point_end,province):
 
     plt.grid(True)
     plt.axis("equal")
-
+    print()
     path = hybrid_a_star_planning(
         start, goal, ox, oy, XY_GRID_RESOLUTION, YAW_GRID_RESOLUTION)
 
