@@ -24,7 +24,7 @@ class MainWindow(QMainWindow):
         self.ui.label_10.setStyleSheet("background: transparent;")
         self.ui.label_12.setStyleSheet("color:white;")
         self.ui.label_13.setStyleSheet("color:white;")
-        self.ui.label_14.setStyleSheet("color:white;")
+        #self.ui.label_14.setStyleSheet("color:white;")
 
 
 if __name__=='__main__':

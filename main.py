@@ -67,6 +67,8 @@ def main():
             prov_inter_points[prov] = interaction_points
             print(interaction_points)
 
+    path_combine_x,path_combine_y = [],[]
+
     for key in prov_inter_points:
         if key == prov_start:
             inter_start = point_start[0],point_start[1]
@@ -85,7 +87,8 @@ def main():
             'province': key
         }
         path = get_path(data)
-        print(path.get('data').get('x'))
+        
+        
 
 
 if __name__ == '__main__':
