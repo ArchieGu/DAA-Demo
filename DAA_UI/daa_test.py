@@ -1,6 +1,6 @@
 import sys
 import os
-import daa_main
+import DAA_UI.daa_main
 
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *

@@ -3,13 +3,16 @@ from Path.Map.utils import (
     is_in_province,
     load_specific_province,
     millerToXY,
+    millerToCoor,
     get_random_point_in_polygon,
     gen_cross_point,
     gen_line,
     gen_random_province,
     gen_start_end_point,
     get_path,
+    uav_model_init
 )
+
 import numpy as np
 from shapely.geometry import Polygon, Point
 import matplotlib.pyplot as plt
@@ -34,8 +37,10 @@ def main():
     prov_end, point_end = gen_start_end_point()
     print(prov_end, point_end)
     '''
+
     point_start = (33172400.000, 6903700.00)
     point_end = (33111518.000000,6789409.0)
+
     prov_start = '天津'
     prov_end = '北京'
     provices_point = load_province()
@@ -79,7 +84,7 @@ def main():
         else:
             inter_start = prov_inter_points[key][0],prov_inter_points[key][1]
             inter_end = prov_inter_points[key][2],prov_inter_points[key][3]
-        print("-----------Just One Province Test-----------")
+        print("-----------One Province Test-----------")
         print("Province:",key)
         data = {
             'start': inter_start,
@@ -87,10 +92,18 @@ def main():
             'province': key
         }
         path = get_path(data)
+        path_x = np.array(path.get('data').get('x'))
+        path_y = np.array(path.get('data').get('y'))
+        path_lon,path_lat = millerToCoor(path_x,path_y)
+        print(path_lon)
         
+    
+
         
 
-
+        
 if __name__ == '__main__':
+    print('--------DAA Demo---------')
+    Ownship = uav_model_init()
     main()
 

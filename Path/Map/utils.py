@@ -55,6 +55,17 @@ def millerToXY (lon, lat):
     y = (H/2)-(H/(2*mill))*y
     return x,y
 
+def millerToCoor(x,y):
+    """平面点转换为经纬度"""
+    L = 6381372 * math.pi*2
+    W = L
+    H = L/2
+    mill = 2.3
+    lat = ((H/2-y)*2*mill)/(1.25*H)
+    lat = ((math.atan(np.exp(lat))-0.25*math.pi)*180)/(0.4*math.pi)
+    lon = (x-W/2)*360/W
+    return lon,lat
+
 
 def is_in_province(provinces_point, province, point):
     """某个平面点是否在某个省内"""
@@ -156,3 +167,37 @@ def http_post(data, host, port):
     url = 'http://{}:{}/{}'.format(host, port, path)
     r = requests.post(url, json=data)
     return r.json() 
+
+class aircraft:
+    def __init__(self, ID, mode, lon, lat,
+                 alt, heading, speed):
+        self.ID = ID
+        self.mode = mode
+        self.lon = lon
+        self.lat = lat
+        self.alt = alt
+        self.heading = heading
+        self.speed = speed
+
+def uav_model_init():
+    print("\nGive the initial conditions for your aircraft:")
+    while(True):
+        print('Would you like to use the default values?')
+        Ownship = aircraft(666,'A',117.84167359617524,38.94488085591196,22000,-118.04390959391104,2000)
+        print('Ownship ID:',Ownship.ID)
+        print('Ownship Mode:',Ownship.mode)
+        print('Ownship lon:',Ownship.lon)
+        print('Ownship lat:',Ownship.lat)
+        print('Ownship alt:',Ownship.alt)
+        print('Ownship heading:',Ownship.heading)
+        print('Ownship speed:',Ownship.speed)
+        valid = input('Please enter (Y/N)')
+        if valid == 'Y' or valid == 'y':
+            return Ownship
+            break
+        elif valid == 'N' or valid =='n':
+            pass
+        else:
+            print("Invalid input, please choose again.")
+    
+        

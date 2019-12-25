@@ -471,7 +471,6 @@ def hybrid_path_planning(point_start,point_end,province):
 
     start = [point_start[0], point_start[1], degree]
     goal = [point_end[0], point_end[1], degree]
-    print("Planning")
     path = hybrid_a_star_planning(
         start, goal, ox, oy, XY_GRID_RESOLUTION, YAW_GRID_RESOLUTION)
 
@@ -482,5 +481,6 @@ def hybrid_path_planning(point_start,point_end,province):
     return {
         'x': x,
         'y': y,
-        'yaw': yaw
+        'yaw': yaw,
+        'heading':degree
     }
