@@ -20,14 +20,15 @@ import math
 import random
 
 try:
+
     from Path.HybridAStar.hybrid_a_star import *
     from Path.HybridAStar.a_star import dp_planning  # , calc_obstacle_map
     import Path.ReedsSheppPath.reeds_shepp_path_planning as rs
     from Path.HybridAStar.uav import move, check_uav_collision, MAX_STEER, WB, plot_uav
     from Path.Map.Map import *
+    from DAAUI.daa_test import Display
 except:
     raise
-
 
 def main():
     '''
@@ -95,15 +96,10 @@ def main():
         path_x = np.array(path.get('data').get('x'))
         path_y = np.array(path.get('data').get('y'))
         path_lon,path_lat = millerToCoor(path_x,path_y)
-        print(path_lon)
-        
-    
-
-        
-
-        
+               
 if __name__ == '__main__':
     print('--------DAA Demo---------')
-    Ownship = uav_model_init()
-    main()
+    #Ownship = uav_model_init()
+    #main()
+    Display()
 

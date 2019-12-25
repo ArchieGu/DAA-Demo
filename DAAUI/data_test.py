@@ -39,6 +39,8 @@ class Window(QDialog):
     def handleDisplay(self, data):
         self.input.setText(data)
 
+
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     win = Window()

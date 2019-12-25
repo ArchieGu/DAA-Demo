@@ -62,7 +62,7 @@ def millerToCoor(x,y):
     H = L/2
     mill = 2.3
     lat = ((H/2-y)*2*mill)/(1.25*H)
-    lat = ((math.atan(np.exp(lat))-0.25*math.pi)*180)/(0.4*math.pi)
+    lat = ((np.arctan(np.exp(lat))-0.25*math.pi)*180)/(0.4*math.pi)
     lon = (x-W/2)*360/W
     return lon,lat
 

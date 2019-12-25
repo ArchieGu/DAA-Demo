@@ -7,6 +7,9 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QApplication,  QDialog,  QLineEdit
+from PyQt5.QtCore import QThread ,  pyqtSignal,  QDateTime , QObject
+import time
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -51,6 +54,16 @@ class Ui_Form(object):
         self.label_8.setFont(font)
         self.label_8.setFrameShadow(QtWidgets.QFrame.Plain)
         self.label_8.setObjectName("label_8")
+
+        self.label_28 = QtWidgets.QLabel(self.frame)
+        self.label_28.setGeometry(QtCore.QRect(150, 810, 180, 51))
+        font = QtGui.QFont()
+        font.setFamily("宋体")
+        font.setPointSize(12)
+        self.label_28.setFont(font)
+        self.label_28.setFrameShadow(QtWidgets.QFrame.Plain)
+        self.label_28.setObjectName("label_28")
+
         self.label = QtWidgets.QLabel(self.frame)
         self.label.setGeometry(QtCore.QRect(740, 80, 100, 671))
         self.label.setText("")
@@ -195,6 +208,7 @@ class Ui_Form(object):
         self.label_23.setObjectName("label_23")
 
         self.retranslateUi(Form)
+
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
@@ -208,4 +222,4 @@ class Ui_Form(object):
         self.label_13.setText(_translate("Form", "Vertical   1000   FT"))
         #self.label_14.setText(_translate("Form", "TextLabel"))
         self.label_18.setText(_translate("Form", "TextLabel"))
-
+    
