@@ -1,12 +1,14 @@
 import sys
 import os
-from DAAUI import daa_main
+import daa_main
 
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWebEngineWidgets import *
-
+import time
+from PyQt5.QtCore import QThread ,  pyqtSignal,  QDateTime , QObject, QTimer
+import sys
 class BackendThread(QObject):
     # 通过类成员对象定义信号
     update_date = pyqtSignal(str)
@@ -36,9 +38,8 @@ class MainWindow(QMainWindow):
         self.ui.label_10.setStyleSheet("background: transparent;")
         self.ui.label_12.setStyleSheet("color:white;")
         self.ui.label_13.setStyleSheet("color:white;")
-        
         #self.ui.label_14.setStyleSheet("color:white;")
-
+    initUI()
     def initUI(self):
         # 创建线程
         self.backend = BackendThread()
@@ -51,18 +52,11 @@ class MainWindow(QMainWindow):
         self.thread.start()
     
     def handleDisplay(self, data):
-        self.label_28.setText(data)
+        self.ui.label_28.setText(data)
 
 
-def Display():
-    app = QApplication(sys.argv)
-    form = MainWindow()
-    form.show()
-    sys.exit(app.exec_())
-'''
 if __name__=='__main__':
     app = QApplication(sys.argv)
     form = MainWindow()
     form.show()
     sys.exit(app.exec_())
-'''

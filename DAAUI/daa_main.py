@@ -8,8 +8,8 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication,  QDialog,  QLineEdit
-from PyQt5.QtCore import QThread ,  pyqtSignal,  QDateTime , QObject
-import time
+
+
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -56,7 +56,7 @@ class Ui_Form(object):
         self.label_8.setObjectName("label_8")
 
         self.label_28 = QtWidgets.QLabel(self.frame)
-        self.label_28.setGeometry(QtCore.QRect(150, 810, 180, 51))
+        self.label_28.setGeometry(QtCore.QRect(220, 810, 180, 51))
         font = QtGui.QFont()
         font.setFamily("宋体")
         font.setPointSize(12)
