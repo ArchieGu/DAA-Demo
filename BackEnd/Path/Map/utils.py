@@ -64,6 +64,8 @@ def millerToCoor(x,y):
     lat = ((H/2-y)*2*mill)/(1.25*H)
     lat = ((np.arctan(np.exp(lat))-0.25*math.pi)*180)/(0.4*math.pi)
     lon = (x-W/2)*360/W
+    lat = np.around(lat,decimals=4)
+    lon = np.around(lon,decimals=4)
     return lon,lat
 
 
