@@ -2,7 +2,7 @@ import json
 from flask import Flask, request, jsonify 
 import argparse
 
-from Path.Map.utils import calculate_path
+from BackEnd.Path.Map.utils import calculate_path
 
 app = Flask(__name__)
 
