@@ -29,7 +29,7 @@ try:
 except:
     raise
 
-def main():
+def backend():
     '''
     prov_start, point_start = gen_start_end_point()
     print(prov_start,point_start)
@@ -48,8 +48,6 @@ def main():
     prov_start = '天津'
     prov_end = '北京'
     
-    
-
     provices_point = load_province()
 
     for prov, points in provices_point.items():
@@ -102,13 +100,9 @@ def main():
         path = get_path(data)
         path_x = np.array(path.get('data').get('x'))
         path_y = np.array(path.get('data').get('y'))
-        ox = np.array(path.get('data').get('ox'))
-        oy = np.array(path.get('data').get('oy'))
 
-        plt.plot(ox,oy,'.k')
-        plt.plot(path_x,path_y,'o-')
-        plt.show()
         path_lon,path_lat = millerToCoor(path_x,path_y)        
+
 if __name__ == '__main__':
     print('--------DAA Demo---------')
     #Ownship = uav_model_init()

@@ -434,8 +434,6 @@ def load_province_boarder(province):
     return prov_lon, prov_lat
 
 
-        
-    
 def hybrid_path_planning(point_start,point_end,province):
     start_time = time()
     ox, oy = [],[]

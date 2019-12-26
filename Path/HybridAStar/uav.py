@@ -7,10 +7,10 @@ author: Zheng Zh (@Zhengzh)
 import matplotlib.pyplot as plt
 from math import sqrt, cos, sin, tan, pi
 
-WB = 150  # rear to front wheel
-W = 340  # width of uav
-LF = 75  # distance from rear to vehicle front end
-LB = 75  # distance from rear to vehicle back end
+WB = 8.  # rear to front wheel
+W = 34.  # width of car
+LF = 10  # distance from rear to vehicle front end
+LB = 5  # distance from rear to vehicle back end
 MAX_STEER = 0.6  # [rad] maximum steering angle
 
 WBUBBLE_DIST = (LF - LB) / 2.0
@@ -46,14 +46,14 @@ def rectangle_check(x, y, yaw, ox, oy):
         ty = ioy - y
         rx = c * tx - s * ty
         ry = s * tx + c * ty
-
+        
         if not (rx > LF or rx < -LB or ry > W / 2.0 or ry < -W / 2.0):
             return False  # no collision
 
     return True  # collision
 
 
-def plot_arrow(x, y, yaw, length=1.0, width=0.5, fc="r", ec="k"):
+def plot_arrow(x, y, yaw, length=120, width=10, fc="r", ec="k"):
     """Plot arrow."""
     if not isinstance(x, float):
         for (ix, iy, iyaw) in zip(x, y, yaw):
