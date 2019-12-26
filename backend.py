@@ -1,4 +1,4 @@
-from BackEnd.Path.Map.utils import (
+from Path.Map.utils import (
     load_province, 
     is_in_province,
     load_specific_province,
@@ -21,11 +21,11 @@ import random
 
 try:
 
-    from BackEnd.Path.HybridAStar.hybrid_a_star import *
-    from BackEnd.Path.HybridAStar.a_star import dp_planning  # , calc_obstacle_map
-    import BackEnd.Path.ReedsSheppPath.reeds_shepp_path_planning as rs
-    from BackEnd.Path.HybridAStar.uav import move, check_uav_collision, MAX_STEER, WB, plot_uav
-    from BackEnd.Path.Map.Map import *
+    from Path.HybridAStar.hybrid_a_star import *
+    from Path.HybridAStar.a_star import dp_planning  # , calc_obstacle_map
+    import Path.ReedsSheppPath.reeds_shepp_path_planning as rs
+    from Path.HybridAStar.uav import move, check_uav_collision, MAX_STEER, WB, plot_uav
+    from Path.Map.Map import *
 except:
     raise
 
@@ -100,6 +100,7 @@ def backend():
         path = get_path(data)
         path_x = np.array(path.get('data').get('x'))
         path_y = np.array(path.get('data').get('y'))
+
         path_lon,path_lat = millerToCoor(path_x,path_y)        
 
 if __name__ == '__main__':
