@@ -100,6 +100,7 @@ def backend():
         path = get_path(data)
         path_x = np.array(path.get('data').get('x'))
         path_y = np.array(path.get('data').get('y'))
+
         path_lon,path_lat = millerToCoor(path_x,path_y)        
 
 if __name__ == '__main__':
