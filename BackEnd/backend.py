@@ -78,8 +78,6 @@ def backend():
             prov_inter_points[prov] = interaction_points
             print(interaction_points)
 
-    path_combine_x,path_combine_y = [],[]
-
     for key in prov_inter_points:
         if key == prov_start:
             inter_start = point_start[0],point_start[1]
@@ -101,8 +99,10 @@ def backend():
         path_x = np.array(path.get('data').get('x'))
         path_y = np.array(path.get('data').get('y'))
 
-        path_lon,path_lat = millerToCoor(path_x,path_y)        
-
+        path_lon,path_lat = millerToCoor(path_x,path_y)
+        
+    
+    print(path_combine_x.flatten())
 if __name__ == '__main__':
     print('--------DAA Demo---------')
     #Ownship = uav_model_init()

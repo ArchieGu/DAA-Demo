@@ -51,6 +51,17 @@ class Ui_Form(object):
         self.label_8.setFont(font)
         self.label_8.setFrameShadow(QtWidgets.QFrame.Plain)
         self.label_8.setObjectName("label_8")
+
+        self.label_lon_lat = QtWidgets.QLabel(self.frame)
+        self.label_lon_lat.setGeometry(QtCore.QRect(190, 810, 250, 51))
+        font = QtGui.QFont()
+        font.setFamily("宋体")
+        font.setPointSize(12)
+        self.label_lon_lat.setFont(font)
+        self.label_lon_lat.setFrameShadow(QtWidgets.QFrame.Plain)
+        self.label_lon_lat.setObjectName("label_lon_lat")
+
+
         self.label = QtWidgets.QLabel(self.frame)
         self.label.setGeometry(QtCore.QRect(740, 80, 100, 671))
         self.label.setText("")
@@ -110,14 +121,12 @@ class Ui_Form(object):
         self.frame_3.setLineWidth(2)
         self.frame_3.setObjectName("frame_3")
         self.label_12 = QtWidgets.QLabel(self.frame_3)
-        self.label_12.setGeometry(QtCore.QRect(10, 20, 72, 15))
+        self.label_12.setGeometry(QtCore.QRect(10, 20, 150, 15))
         self.label_12.setObjectName("label_12")
         self.label_13 = QtWidgets.QLabel(self.frame_3)
-        self.label_13.setGeometry(QtCore.QRect(140, 20, 72, 15))
+        self.label_13.setGeometry(QtCore.QRect(240, 20, 200, 15))
         self.label_13.setObjectName("label_13")
-        self.label_14 = QtWidgets.QLabel(self.frame_3)
-        self.label_14.setGeometry(QtCore.QRect(300, 20, 72, 15))
-        self.label_14.setObjectName("label_14")
+        
         self.label_16 = QtWidgets.QLabel(self.frame_3)
         self.label_16.setGeometry(QtCore.QRect(190, 240, 41, 20))
         self.label_16.setText("")
@@ -180,8 +189,8 @@ class Ui_Form(object):
         self.label_6.setText(_translate("Form", "TCAS SPEED"))
         self.label_7.setText(_translate("Form", "GS"))
         self.label_8.setText(_translate("Form", "Longitude/Latitude "))
-        self.label_12.setText(_translate("Form", "TextLabel"))
-        self.label_13.setText(_translate("Form", "TextLabel"))
-        self.label_14.setText(_translate("Form", "TextLabel"))
-        self.label_18.setText(_translate("Form", "TextLabel"))
+        self.label_12.setText(_translate("Form", "ALONG TRACK  50  NM"))
+        self.label_13.setText(_translate("Form", "Vertical   8200 FT"))
+        
+        #self.label_18.setText(_translate("Form", "Label 18"))
 

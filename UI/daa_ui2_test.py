@@ -18,7 +18,7 @@ class MainWindow(QMainWindow):
         self.ui.frame_1.setStyleSheet("background:black;")
         self.ui.frame_2.setStyleSheet("background:black;")
         self.ui.frame_3.setStyleSheet("background:black;")
-        url = os.getcwd() + '/map_b.html'
+        url = 'UI/map_b.html'
         self.browser = QWebEngineView()
         self.browser.load(QUrl.fromLocalFile(url))
         self.ui.horizontalLayout.addWidget(self.browser)
