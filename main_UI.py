@@ -1,7 +1,7 @@
 import sys
 import os
 from UI import daa_ui1_new,daa_ui2,daa_ui2_test
-
+from BackEnd.Path.Map.utils import uav_model_init 
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -34,10 +34,13 @@ class DAA_Form1(QMainWindow):
         self.ui.label_36.setStyleSheet("color:white;")
         self.ui.label_35.setStyleSheet("color:white;")
         
+        
+        self.Ownship = uav_model_init()
         self.path_lon,self.path_lat = backend()
         self.path_lon = self.path_lon.tolist()
         self.path_lat = self.path_lat.tolist()
         self.timer_a = QTimer(self)
+        self.timer_a.timeout.connect(self.load_lon_lat)
         self.timer_a.timeout.connect(self.load_lon_lat)
         self.count = 0
         self.start_timer()
@@ -53,6 +56,7 @@ class DAA_Form1(QMainWindow):
         else:
             self.ui.label_13.setText(str(self.path_lon[self.count])+' / '+str(self.path_lat[self.count]))
             self.count+=1
+    
 
 class DAA_Form2(QMainWindow):
 
@@ -65,17 +69,20 @@ class DAA_Form2(QMainWindow):
         self.ui.frame_2.setStyleSheet("background:black;")
         self.ui.frame_3.setStyleSheet("background:black;")
         #url = os.getcwd() + '/UI/map_b.html'
-        url = 'UI/map_b.html'
+        #url = 'UI/map_b.html'
+        url = 'www.baidu.com'
         print(url)
         self.browser = QWebEngineView()
-        self.browser.load(QUrl.fromLocalFile(url))
+        self.browser.load(QUrl(url))
+
+        #self.browser.load(QUrl.fromLocalFile(url))
         self.ui.horizontalLayout.addWidget(self.browser)
 
 if __name__=='__main__':
 
     app = QApplication(sys.argv)
-    form = DAA_Form1()
-    #form2 =  DAA_Form2()
-    form.show()
-    #form2.show()
+    #form = DAA_Form1()
+    form2 =  DAA_Form2()
+    #form.show()
+    form2.show()
     sys.exit(app.exec_())
