@@ -171,9 +171,9 @@ def http_post(data, host, port):
     return r.json() 
 
 class aircraft:
-    def __init__(self, ID, mode, lon, lat,
+    def __init__(self, ICAO, mode, lon, lat,
                  alt, heading, speed):
-        self.ID = ID
+        self.ICAO = ICAO
         self.mode = mode
         self.lon = lon
         self.lat = lat
@@ -185,8 +185,8 @@ def uav_model_init():
     print("\nGive the initial conditions for your aircraft:\n")
     while(True):
         print('Would you like to use the default values?\n')
-        Ownship = aircraft(666,'A',117.84167359617524,38.94488085591196,22000,-118.04390959391104,2000)
-        print('Ownship ID:',Ownship.ID)
+        Ownship = aircraft('QFA50','A',117.84167359617524,38.94488085591196,22000,-118.04390959391104,2000)
+        print('Ownship ICAO:',Ownship.ICAO)
         print('Ownship Mode:',Ownship.mode)
         print('Ownship lon:',Ownship.lon)
         print('Ownship lat:',Ownship.lat)

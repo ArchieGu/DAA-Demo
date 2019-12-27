@@ -5,7 +5,7 @@ from BackEnd.Path.Map.utils import uav_model_init
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-from PyQt5.QtWebEngineWidgets import *
+from PyQt5.QtWebEngineWidgets import QWebEngineView
 from BackEnd.backend import backend
 
 class DAA_Form1(QMainWindow):
@@ -68,14 +68,14 @@ class DAA_Form2(QMainWindow):
         self.ui.frame_1.setStyleSheet("background:black;")
         self.ui.frame_2.setStyleSheet("background:black;")
         self.ui.frame_3.setStyleSheet("background:black;")
-        #url = os.getcwd() + '/UI/map_b.html'
-        #url = 'UI/map_b.html'
-        url = 'www.baidu.com'
-        print(url)
+        url = os.getcwd() +r'\UI\map_b.html'
         self.browser = QWebEngineView()
-        self.browser.load(QUrl(url))
-
-        #self.browser.load(QUrl.fromLocalFile(url))
+        self.browser.loadStarted.connect(lambda: print("Loading started"))
+        self.browser.loadProgress.connect(lambda p: print("Loading progress: {}%".format(p)))
+        self.browser.loadFinished.connect(lambda: print("Loading finished"))
+        self.browser.load(QUrl.fromLocalFile(url))
+        self.browser.show()
+        
         self.ui.horizontalLayout.addWidget(self.browser)
 
 if __name__=='__main__':

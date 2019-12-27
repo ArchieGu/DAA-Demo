@@ -480,5 +480,4 @@ def hybrid_path_planning(point_start,point_end,province):
         'x': x,
         'y': y,
         'yaw': yaw,
-        'heading':degree
     }

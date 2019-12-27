@@ -3,3 +3,8 @@ requests
 flask
 shapely
 pyqtwebengine
+numpy
+jsonify
+matplotlib
+scipy
+pandas

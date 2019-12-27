@@ -5,7 +5,7 @@ import os
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-from PyQt5.QtWebEngineWidgets import *
+from PyQt5.QtWebEngineWidgets import QWebEngineView
 
 
 class MainWindow(QMainWindow):
@@ -21,6 +21,7 @@ class MainWindow(QMainWindow):
         url = 'UI/map_b.html'
         self.browser = QWebEngineView()
         self.browser.load(QUrl.fromLocalFile(url))
+        self.browser.show()
         self.ui.horizontalLayout.addWidget(self.browser)
 
 

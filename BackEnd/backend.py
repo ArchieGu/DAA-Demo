@@ -77,9 +77,10 @@ def backend():
         if interaction_points:
             prov_inter_points[prov] = interaction_points
             print(interaction_points)
+    
     path_combine_x = np.array([])
     path_combine_y = np.array([])
-
+    path_combine_yaw = np.array([])
     for key in prov_inter_points:
         if key == prov_start:
             inter_start = point_start[0],point_start[1]
@@ -100,11 +101,13 @@ def backend():
         path = get_path(data)
         path_x = np.array(path.get('data').get('x'))
         path_y = np.array(path.get('data').get('y'))
+        path_yaw = np.array(path.get('data').get('yaw'))
 
         path_lon,path_lat = millerToCoor(path_x,path_y)
         path_combine_x = np.concatenate((path_combine_x, path_lon))
         path_combine_y = np.concatenate((path_combine_y, path_lat))
-    return path_combine_x,path_combine_y
+        path_combine_yaw = np.concatenate((path_combine_yaw, path_yaw))
+    return path_combine_x,path_combine_y,path_combine_yaw
 
 
     
