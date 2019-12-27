@@ -87,7 +87,7 @@ class DAA_Form2(QMainWindow):
         self.initOwnshipData()
         #self.timer_a.timeout.connect(self.initOwnshipData)
         self.count = 0
-        self.start_timer()
+        #self.start_timer()
    
     def start_timer(self):
         self.timer_a.start(500)
@@ -110,8 +110,6 @@ class DAA_Form2(QMainWindow):
         print(js_string_own_init)
         self.browser.page().runJavaScript(js_string_own_init) #初始化本机位置、标注、航线、移动
     
-    
-    '''
     def import_info_own(self):
       
         if self.count > len(self.path_lat):
@@ -121,13 +119,9 @@ class DAA_Form2(QMainWindow):
             current_lat = float(self.path_lat[self.count])
             current_yaw = float(self.path_yaw[self.count])
             print("current_yaw:",current_yaw)
-            
+            js_string_own = '''update_own_position(%f,%f,%f)'''%(current_lng,current_lat,current_yaw-45)
             self.browser.page().runJavaScript(js_string_own)
             self.count+=1
-    '''
-     
- 
-
 
 if __name__=='__main__':
 

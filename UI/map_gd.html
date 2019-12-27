@@ -78,7 +78,12 @@
             });
             layer.render();
         });
-        
+
+
+
+
+
+/*        
         ///更新本机位置
         function update_own_position(lng,lat,angle){
             eval("window.marker_ownship.setPosition(["+lng+","+lat+"])")
@@ -86,7 +91,7 @@
             window.text_ownship.setPosition([lng,lat])
         }
         /// 配置本机
-        function init_ownship(first_lng,first_lat,flight_ICAO,path){
+        function init_ownship(first_lng,first_lat,flight_ID,path){
             window.marker_ownship = new AMap.Marker(
             {
                 position: new AMap.LngLat(first_lng,first_lat),
@@ -94,9 +99,10 @@
                 icon: 'https://webapi.amap.com/ui/1.0/ui/misc/PathSimplifier/examples/imgs/plane.png', // 添加 Icon 图标 URL
                 title: '本机',
             });
+            
             // 创建纯文本标记
             window.text_ownship = new AMap.Text({
-            text: flight_ICAO,
+            text: flight_ID,
             cursor:'pointer',
             offset: new AMap.Pixel(0, 30),
             angle:0,
@@ -140,7 +146,7 @@
             map.setFitView([polyline_own]);
             polylines.push(polyline_own)
         }
-
+*/
     </script>
 </body>
 
