@@ -68,7 +68,7 @@ class DAA_Form2(QMainWindow):
         self.ui.frame_2.setStyleSheet("background:black;")
         self.ui.frame_3.setStyleSheet("background:black;")
         
-        url = os.getcwd() +r'\UI\map_b.html'
+        url = os.getcwd() +r'\UI\map_gd.html'
         print(url)
         self.browser = QWebEngineView()
         #self.browser.loadStarted.connect(lambda: print("Loading started"))
@@ -77,15 +77,15 @@ class DAA_Form2(QMainWindow):
         self.browser.load(QUrl.fromLocalFile(url))
         self.browser.show()
         self.ui.horizontalLayout.addWidget(self.browser)
-
+        
         self.data_ownship = uav_model_init()
         self.path_lon,self.path_lat,self.path_yaw = backend()    
         self.path_lon = self.path_lon.tolist()    # 经度序列
         self.path_lat = self.path_lat.tolist()    # 纬度序列
         self.path_yaw = self.path_yaw.tolist()    # 本机航向角序列
-
         self.timer_a = QTimer(self)
-        self.timer_a.timeout.connect(self.import_info_own)
+        self.initOwnshipData()
+        #self.timer_a.timeout.connect(self.initOwnshipData)
         self.count = 0
         self.start_timer()
    
@@ -95,6 +95,23 @@ class DAA_Form2(QMainWindow):
     def stop_timer(self):
         self.timer_a.stop()
 
+    def initOwnshipData(self):
+        ownship_ID = self.data_ownship.ID
+        path_own_list = [] #本机航路序列
+        
+        for i in range(len(self.path_lon)):
+            lng = self.path_lon[i]
+            lat = self.path_lat[i]
+            path_own_list.append([lng,lat])
+            #lng = hanglu_own['point'+str(i)][1]
+            #lat = hanglu_own['point'+str(i)][2]
+            #hanglu_own_list.append([lng,lat])
+        js_string_own_init = '''init_ownship(%f,%f,%d,%s);'''%(self.path_lon[0],self.path_lat[0],ownship_ID,path_own_list)
+        print(js_string_own_init)
+        self.browser.page().runJavaScript(js_string_own_init) #初始化本机位置、标注、航线、移动
+    
+    
+    '''
     def import_info_own(self):
       
         if self.count > len(self.path_lat):
@@ -104,9 +121,10 @@ class DAA_Form2(QMainWindow):
             current_lat = float(self.path_lat[self.count])
             current_yaw = float(self.path_yaw[self.count])
             print("current_yaw:",current_yaw)
-            js_string_own = '''update_own_position(%f,%f,%f)'''%(current_lng,current_lat,current_yaw-45)
+            
             self.browser.page().runJavaScript(js_string_own)
             self.count+=1
+    '''
      
  
 

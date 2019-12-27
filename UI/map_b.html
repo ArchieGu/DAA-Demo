@@ -48,17 +48,17 @@
         window.text_ownship.setPosition([lng,lat])
     }
 	/// 配置本机
-	function init_ownship(first_lng,first_lat,flight_id,path){
+	function init_ownship(first_lng,first_lat,flight_ICAO,path){
         window.marker_ownship = new AMap.Marker(
         {
             position: new AMap.LngLat(first_lng,first_lat),
             offset: new AMap.Pixel(-10,-10),
-            icon: 'UI\pic\feiji.png', // 添加 Icon 图标 URL
+            icon: r'UI\pic\feiji.png', // 添加 Icon 图标 URL
             title: '本机',
         });
         // 创建纯文本标记
         window.text_ownship = new AMap.Text({
-        text: flight_id,
+        text: flight_ICAO,
         cursor:'pointer',
         offset: new AMap.Pixel(0, 30),
         angle:0,
