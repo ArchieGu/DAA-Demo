@@ -34,7 +34,6 @@ class DAA_Form1(QMainWindow):
         self.ui.label_36.setStyleSheet("color:white;")
         self.ui.label_35.setStyleSheet("color:white;")
         
-        
         self.Ownship = uav_model_init()
         self.path_lon,self.path_lat = backend()
         self.path_lon = self.path_lon.tolist()
@@ -68,15 +67,49 @@ class DAA_Form2(QMainWindow):
         self.ui.frame_1.setStyleSheet("background:black;")
         self.ui.frame_2.setStyleSheet("background:black;")
         self.ui.frame_3.setStyleSheet("background:black;")
+        
         url = os.getcwd() +r'\UI\map_b.html'
+        print(url)
         self.browser = QWebEngineView()
-        self.browser.loadStarted.connect(lambda: print("Loading started"))
-        self.browser.loadProgress.connect(lambda p: print("Loading progress: {}%".format(p)))
-        self.browser.loadFinished.connect(lambda: print("Loading finished"))
+        #self.browser.loadStarted.connect(lambda: print("Loading started"))
+        #self.browser.loadProgress.connect(lambda p: print("Loading progress: {}%".format(p)))
+        #self.browser.loadFinished.connect(lambda: print("Loading finished"))
         self.browser.load(QUrl.fromLocalFile(url))
         self.browser.show()
-        
         self.ui.horizontalLayout.addWidget(self.browser)
+
+        self.data_ownship = uav_model_init()
+        self.path_lon,self.path_lat,self.path_yaw = backend()    
+        self.path_lon = self.path_lon.tolist()    # 经度序列
+        self.path_lat = self.path_lat.tolist()    # 纬度序列
+        self.path_yaw = self.path_yaw.tolist()    # 本机航向角序列
+
+        self.timer_a = QTimer(self)
+        self.timer_a.timeout.connect(self.import_info_own)
+        self.count = 0
+        self.start_timer()
+   
+    def start_timer(self):
+        self.timer_a.start(500)
+
+    def stop_timer(self):
+        self.timer_a.stop()
+
+    def import_info_own(self):
+      
+        if self.count > len(self.path_lat):
+            self.timer_a.stop()
+        else:
+            current_lng = float(self.path_lon[self.count])
+            current_lat = float(self.path_lat[self.count])
+            current_yaw = float(self.path_yaw[self.count])
+            print("current_yaw:",current_yaw)
+            js_string_own = '''update_own_position(%f,%f,%f)'''%(current_lng,current_lat,current_yaw-45)
+            self.browser.page().runJavaScript(js_string_own)
+            self.count+=1
+     
+ 
+
 
 if __name__=='__main__':
 

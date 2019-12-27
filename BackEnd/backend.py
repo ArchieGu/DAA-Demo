@@ -22,7 +22,7 @@ import random
 try:
 
     from BackEnd.Path.HybridAStar.hybrid_a_star import *
-    from BackEnd.Path.HybridAStar.a_star import dp_planning  # , calc_obstacle_map
+    from BackEnd.Path.HybridAStar.a_star import dp_planning  
     import BackEnd.Path.ReedsSheppPath.reeds_shepp_path_planning as rs
     from BackEnd.Path.HybridAStar.uav import move, check_uav_collision, MAX_STEER, WB, plot_uav
     from BackEnd.Path.Map.Map import *

@@ -12,20 +12,17 @@
       height: 100%;
     }
     </style>
-    <title>飞行轨迹显示</title>
+    <title>ADS-B终端软件地图示意</title>
     <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css" />
     <script src="https://webapi.amap.com/maps?v=1.4.15&key=761cd17c1ab4b06ec41d7f20e09e30d4&plugin=AMap.PolyEditor"></script>
-    <script src="https://webapi.amap.com/loca?v=1.3.0&key=035906e992c7d45a07deae1f56a91220"></script>
-    <script src="https://a.amap.com/Loca/static/dist/jquery.min.js"></script>
     <script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
-    <script src="https://webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
 </head>
 <body>
 <div id="container"></div>
 <script type="text/javascript">
     var map = new AMap.Map("container", {
-        center: [103.948333,30.580000],
-        zoom: 3
+        center: [103.948333,	30.580000],
+        zoom: 4
     });
     // 构造官方卫星、路网图层
     var layer1 = new AMap.TileLayer.Satellite();
@@ -43,29 +40,6 @@
         map.remove(polylines)
         map.remove(texts)
     }
-    $.getJSON('https://raw.githubusercontent.com/ArchieGu/TCAS-simulator/master/pos_gd.json', function (data) {
-        var layer = new Loca.PolygonLayer({
-            map: map,
-            fitView: true
-        });
-
-        layer.setData(data, {
-            type: 'json',
-            lnglat: 'POS',
-        });
-
-        var idx = 0;
-        var colors = ['#ffffcc', '#a1dab4', '#41b6c4', '#225ea8'];
-        layer.setOptions({
-            style: {
-                height:200000,
-                opacity: 0.8,
-                color: function () {
-                    return colors[idx++ % colors.length];
-                }
-            }
-        });
-        layer.render();
 
     ///更新本机位置
     function update_own_position(lng,lat,angle){
@@ -129,6 +103,7 @@
         polylines.push(polyline_own)
     }
 
+  
 </script>
 </body>
 </html>
