@@ -84,7 +84,7 @@ class DAA_Form2(QMainWindow):
         self.path_lat = self.path_lat.tolist()    # 纬度序列
         self.path_yaw = self.path_yaw.tolist()    # 本机航向角序列
         self.timer_a = QTimer(self)
-        self.initOwnshipData()
+        self.getPathData()
         #self.timer_a.timeout.connect(self.initOwnshipData)
         self.count = 0
         #self.start_timer()
@@ -95,10 +95,10 @@ class DAA_Form2(QMainWindow):
     def stop_timer(self):
         self.timer_a.stop()
 
-    def initOwnshipData(self):
+    def getPathData(self):
         ownship_ID = self.data_ownship.ID
         path_own_list = [] #本机航路序列
-        
+        path_data = {}
         for i in range(len(self.path_lon)):
             lng = self.path_lon[i]
             lat = self.path_lat[i]
@@ -106,10 +106,11 @@ class DAA_Form2(QMainWindow):
             #lng = hanglu_own['point'+str(i)][1]
             #lat = hanglu_own['point'+str(i)][2]
             #hanglu_own_list.append([lng,lat])
-        js_string_own_init = '''init_ownship(%f,%f,%d,%s);'''%(self.path_lon[0],self.path_lat[0],ownship_ID,path_own_list)
+        path_data[ownship_ID] = path_own_list
+        js_string_own_init = '''getPathData(%s);'''%(path_data)
         print(js_string_own_init)
         self.browser.page().runJavaScript(js_string_own_init) #初始化本机位置、标注、航线、移动
-    
+'''  
     def import_info_own(self):
       
         if self.count > len(self.path_lat):
@@ -119,10 +120,10 @@ class DAA_Form2(QMainWindow):
             current_lat = float(self.path_lat[self.count])
             current_yaw = float(self.path_yaw[self.count])
             print("current_yaw:",current_yaw)
-            js_string_own = '''update_own_position(%f,%f,%f)'''%(current_lng,current_lat,current_yaw-45)
+           
             self.browser.page().runJavaScript(js_string_own)
             self.count+=1
-
+'''
 if __name__=='__main__':
 
     app = QApplication(sys.argv)
