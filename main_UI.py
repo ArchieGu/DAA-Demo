@@ -1,5 +1,6 @@
 import sys
 import os
+import json
 from UI import daa_ui1_new,daa_ui2,daa_ui2_test
 from BackEnd.Path.Map.utils import uav_model_init 
 from PyQt5.QtWidgets import *
@@ -106,10 +107,18 @@ class DAA_Form2(QMainWindow):
             #lng = hanglu_own['point'+str(i)][1]
             #lat = hanglu_own['point'+str(i)][2]
             #hanglu_own_list.append([lng,lat])
-        path_data[ownship_ID] = path_own_list
-        js_string_own_init = '''getPathData(%s);'''%(path_data)
-        print(js_string_own_init)
-        self.browser.page().runJavaScript(js_string_own_init) #初始化本机位置、标注、航线、移动
+        path_data = {
+            "name" : ownship_ID,
+            "path" : path_own_list
+        }
+
+        path2 = json.dumps([path_data])
+        with open('static\path2.json','w') as json_file:
+            json_file.write(path2)
+    
+        
+
+        
 '''  
     def import_info_own(self):
       

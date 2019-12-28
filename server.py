@@ -1,11 +1,10 @@
 import json 
 from flask import Flask, request, jsonify 
 import argparse
-
 from BackEnd.Path.Map.utils import calculate_path
-
+from flask_cors import *
 app = Flask(__name__)
-
+CORS(app, supports_credentials=True)
 @app.route('/cal_path', methods=['POST'])
 def cal_path():
     try:
@@ -18,13 +17,28 @@ def cal_path():
             'msg': '发送数据错误',
             'data': []
         }), 400
-
     path = calculate_path(data)
     return jsonify({
         'code': 0,
         'data': path 
     })
-    
+
+@app.route('/file/<filename>')
+def file(filename):
+    file = os.path.join('static', filename)
+    data = open(file).read()
+
+    res = jsonify({
+        'code': 0,
+        'data': data
+    })
+    res = make_response(res)
+    res.headers['Access-Control-Allow-Origin'] = '*'
+    res.headers['Access-Control-Allow-Methods'] = 'GET'
+    res.headers['Access-Control-Allow-Headers'] = 'x-requested-with,content-type'
+    return res
+
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

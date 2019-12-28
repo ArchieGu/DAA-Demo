@@ -57,7 +57,7 @@
         });
         //禁飞区显示
       
-        $.getJSON('https://raw.githubusercontent.com/ArchieGu/TCAS-simulator/master/pos_gd.json', function (data) {
+        $.getJSON('http://localhost:9099/static/pos_gd.json', function (data) {
             var layer = new Loca.PolygonLayer({
                 map: map,
                 fitView: true
@@ -141,7 +141,7 @@
             $('<div id="loadingTip">加载数据，请稍候...</div>').appendTo(document.body);
 
             //$.getJSON('https://raw.githubusercontent.com/ArchieGu/TCAS-simulator/master/path.json', function(d) {
-            function getPathData(pathDict){
+            $.getJSON('http://localhost:9099/static/path2.json', function(d) {
                 $('#loadingTip').remove();
 
                 pathSimplifierIns.setData(pathDict);
@@ -179,7 +179,7 @@
                 });
 
                 navg1.start();
-            }//});
+            });
         });
 
 
