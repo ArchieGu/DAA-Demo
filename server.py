@@ -5,6 +5,7 @@ from BackEnd.Path.Map.utils import calculate_path
 from flask_cors import *
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
+
 @app.route('/cal_path', methods=['POST'])
 def cal_path():
     try:

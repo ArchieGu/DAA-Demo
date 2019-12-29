@@ -25,29 +25,18 @@
     <script src="https://a.amap.com/Loca/static/dist/jquery.min.js"></script>
     <!-- UI组件库 1.0 -->
     <script src="https://webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
-    <script type="text/javascript"> 
+    <script> 
         var map = new AMap.Map('container', {
-            center: [116.397428, 39.90923],
-            zoom: 4,
             layers: [
                 // 卫星
                 new AMap.TileLayer.Satellite(),
                 // 路网
                 new AMap.TileLayer.RoadNet()
-            ]
+            ],
+            
+            zoom: 9,
+            
         });
-
-        var markers = []  //所有点标记
-        var texts = []     //所有文本标记
-        var polylines = []  //所有航路
-
-        function removeMarkers() {
-            //删除所有点标记和线标记
-            map.remove(markers)
-            map.remove(polylines)
-            map.remove(texts)
-        }
-
 
         map.on('mapload', function () {
             map.getMap().plugin(['AMap.ControlBar'], function () {
@@ -55,9 +44,8 @@
                 map.getMap().addControl(controlBar);
             });
         });
-        //禁飞区显示
-      
-        $.getJSON('http://localhost:9099/static/pos_gd.json', function (data) {
+        
+        $.getJSON('https://raw.githubusercontent.com/ArchieGu/TCAS-simulator/master/pos_gd.json', function (data) {
             var layer = new Loca.PolygonLayer({
                 map: map,
                 fitView: true
@@ -73,181 +61,116 @@
                 style: {
                     height:200000,
                     opacity: 0.8,
-                    color: '#930000'
+                    color: '#8A0808'
                 }
             });
             layer.render();
-        });
 
-        AMapUI.load(['ui/misc/PathSimplifier', 'lib/$'], function(PathSimplifier, $) {
 
-            if (!PathSimplifier.supportCanvas) {
-                alert('当前环境不支持 Canvas！');
-                return;
-            }
+            AMapUI.load(['ui/misc/PathSimplifier', 'lib/$'], function(PathSimplifier, $) {
 
-            //just some colors
-            var colors = [
-                "#3366cc", "#dc3912", "#ff9900", "#109618", "#990099", "#0099c6", "#dd4477", "#66aa00",
-                "#b82e2e", "#316395", "#994499", "#22aa99", "#aaaa11", "#6633cc", "#e67300", "#8b0707",
-                "#651067", "#329262", "#5574a6", "#3b3eac"
-            ];
+                if (!PathSimplifier.supportCanvas) {
+                    alert('当前环境不支持 Canvas！');
+                    return;
+                }
 
-            var pathSimplifierIns = new PathSimplifier({
-                zIndex: 100,
-                //autoSetFitView:false,
-                map: map, //所属的地图实例
+                //just some colors
+                var colors = [
+                    "#3366cc", "#dc3912", "#ff9900", "#109618", "#990099", "#0099c6", "#dd4477", "#66aa00",
+                    "#b82e2e", "#316395", "#994499", "#22aa99", "#aaaa11", "#6633cc", "#e67300", "#8b0707",
+                    "#651067", "#329262", "#5574a6", "#3b3eac"
+                ];
 
-                getPath: function(pathData, pathIndex) {
+                var pathSimplifierIns = new PathSimplifier({
+                    zIndex: 100,
+                    //autoSetFitView:false,
+                    map: map, //所属的地图实例
 
-                    return pathData.path;
-                },
-                getHoverTitle: function(pathData, pathIndex, pointIndex) {
+                    getPath: function(pathData, pathIndex) {
 
-                    if (pointIndex >= 0) {
-                        //point 
-                        return pathData.name + '，点：' + pointIndex + '/' + pathData.path.length;
-                    }
-
-                    return pathData.name + '，点数量' + pathData.path.length;
-                },
-                renderOptions: {
-                    pathLineStyle: {
-                        dirArrowStyle: true
+                        return pathData.path;
                     },
-                    getPathStyle: function(pathItem, zoom) {
+                    getHoverTitle: function(pathData, pathIndex, pointIndex) {
 
-                        var color = colors[pathItem.pathIndex % colors.length],
-                            lineWidth = Math.round(4 * Math.pow(1.1, zoom - 3));
+                        if (pointIndex >= 0) {
+                            //point 
+                            return pathData.name + '，点：' + pointIndex + '/' + pathData.path.length;
+                        }
 
-                        return {
-                            pathLineStyle: {
-                                strokeStyle: color,
-                                lineWidth: lineWidth
-                            },
-                            pathLineSelectedStyle: {
-                                lineWidth: lineWidth + 2
-                            },
-                            pathNavigatorStyle: {
-                                fillStyle: color
-                            }
-                        };
-                    }
-                }
-            });
+                        return pathData.name + '，点数量' + pathData.path.length;
+                    },
+                    renderOptions: {
+                        pathLineStyle: {
+                            dirArrowStyle: true
+                        },
+                        getPathStyle: function(pathItem, zoom) {
 
-            window.pathSimplifierIns = pathSimplifierIns;
+                            var color = colors[pathItem.pathIndex % colors.length],
+                                lineWidth = Math.round(4 * Math.pow(1.1, zoom - 3));
 
-            $('<div id="loadingTip">加载数据，请稍候...</div>').appendTo(document.body);
-
-            //$.getJSON('https://raw.githubusercontent.com/ArchieGu/TCAS-simulator/master/path.json', function(d) {
-            $.getJSON('http://localhost:9099/static/path2.json', function(d) {
-                $('#loadingTip').remove();
-
-                pathSimplifierIns.setData(pathDict);
-
-                //initRoutesContainer(d);
-
-                function onload() {
-                    pathSimplifierIns.renderLater();
-                }
-
-                function onerror(e) {
-                    alert('图片加载失败！');
-                }
-
-                var navg1 = pathSimplifierIns.createPathNavigator(0, {
-                    loop: true,
-                    speed: 10000,
-                    pathNavigatorStyle: {
-                        width: 24,
-                        height: 24,
-                        //使用图片
-                        content: PathSimplifier.Render.Canvas.getImageContent('https://webapi.amap.com/ui/1.0/ui/misc/PathSimplifier/examples/imgs/plane.png', onload, onerror),
-                        strokeStyle: null,
-                        fillStyle: null,
-                        //经过路径的样式
-                        pathLinePassedStyle: {
-                            lineWidth: 3,
-                            strokeStyle: 'black',
-                            dirArrowStyle: {
-                                stepSpace: 15,
-                                strokeStyle: 'red'
-                            }
+                            return {
+                                pathLineStyle: {
+                                    strokeStyle: color,
+                                    lineWidth: lineWidth
+                                },
+                                pathLineSelectedStyle: {
+                                    lineWidth: lineWidth + 2
+                                },
+                                pathNavigatorStyle: {
+                                    fillStyle: color
+                                }
+                            };
                         }
                     }
                 });
 
-                navg1.start();
+                window.pathSimplifierIns = pathSimplifierIns;
+
+                $('<div id="loadingTip">加载数据，请稍候...</div>').appendTo(document.body);
+
+                $.getJSON('https://raw.githubusercontent.com/ArchieGu/TCAS-simulator/master/path2.json', function(d) {
+
+                    $('#loadingTip').remove();
+
+                    pathSimplifierIns.setData(d);
+
+                    //initRoutesContainer(d);
+
+                    function onload() {
+                        pathSimplifierIns.renderLater();
+                    }
+
+                    function onerror(e) {
+                        alert('图片加载失败！');
+                    }
+
+                    var navg1 = pathSimplifierIns.createPathNavigator(0, {
+                        loop: true,
+                        speed: 10000,
+                        pathNavigatorStyle: {
+                            width: 24,
+                            height: 24,
+                            //使用图片
+                            content: PathSimplifier.Render.Canvas.getImageContent('https://webapi.amap.com/ui/1.0/ui/misc/PathSimplifier/examples/imgs/plane.png', onload, onerror),
+                            strokeStyle: null,
+                            fillStyle: null,
+                            //经过路径的样式
+                            pathLinePassedStyle: {
+                                lineWidth: 3,
+                                strokeStyle: 'black',
+                                dirArrowStyle: {
+                                    stepSpace: 15,
+                                    strokeStyle: 'red'
+                                }
+                            }
+                        }
+                    });
+
+                    navg1.start();
+
+                });
             });
         });
-
-
-
-/*        
-        ///更新本机位置
-        function update_own_position(lng,lat,angle){
-            eval("window.marker_ownship.setPosition(["+lng+","+lat+"])")
-            eval("window.marker_ownship.setAngle("+angle+")")
-            window.text_ownship.setPosition([lng,lat])
-        }
-        /// 配置本机
-        function init_ownship(first_lng,first_lat,flight_ID,path){
-            window.marker_ownship = new AMap.Marker(
-            {
-                position: new AMap.LngLat(first_lng,first_lat),
-                offset: new AMap.Pixel(-10,-10),
-                icon: 'https://webapi.amap.com/ui/1.0/ui/misc/PathSimplifier/examples/imgs/plane.png', // 添加 Icon 图标 URL
-                title: '本机',
-            });
-            
-            // 创建纯文本标记
-            window.text_ownship = new AMap.Text({
-            text: flight_ID,
-            cursor:'pointer',
-            offset: new AMap.Pixel(0, 30),
-            angle:0,
-            style:{
-                'padding': '0rem 0rem',
-                'margin-bottom': '.25rem',
-                'border-radius': '.25rem',
-                'background-color': 'white',
-                'width': '4rem',
-                'border-width': 0,
-                'box-shadow': '0 2px 6px 0 rgba(114, 124, 245, .5)',
-                'text-align': 'center',
-                'font-size': '12px',
-                'color': 'blue'
-            },
-            position: [first_lng,first_lat]
-            });
-            map.add(window.marker_ownship)
-            map.add(window.text_ownship)
-            markers.push(window.marker_ownship)
-            texts.push(window.text_ownship)
-            //设置本机航路
-            var polyline_own = new AMap.Polyline({
-            isOutline: true,
-            outlineColor: '#ffeeff',
-            borderWeight: 2,
-            strokeColor: "#3366FF",
-            strokeOpacity: 1,
-            strokeWeight: 3,
-            // 折线样式还支持 'dashed'
-            strokeStyle: "solid",
-            // strokeStyle是dashed时有效
-            strokeDasharray: [10, 5],
-            lineJoin: 'round',
-            lineCap: 'round',
-            zIndex: 50,
-            });
-            var path_own= path;
-            polyline_own.setPath(path_own);
-            polyline_own.setMap(map);
-            map.setFitView([polyline_own]);
-            polylines.push(polyline_own)
-        }
-*/
     </script>
 </body>
 

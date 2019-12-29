@@ -34,9 +34,15 @@ class DAA_Form1(QMainWindow):
         self.ui.label_18.setStyleSheet("color:white;")
         self.ui.label_36.setStyleSheet("color:white;")
         self.ui.label_35.setStyleSheet("color:white;")
-        
+        self.ui.comboBox_2.setStyleSheet("color:white;")
+        self.ui.comboBox.setStyleSheet("color:white;")
+
+
+
         self.Ownship = uav_model_init()
-        self.path_lon,self.path_lat = backend()
+
+        self.ui.label_3.setPixmap(QtGui.QPixmap("UI\pic/1.png"))
+        self.path_lon,self.path_lat,self.path_yaw = backend()
         self.path_lon = self.path_lon.tolist()
         self.path_lat = self.path_lat.tolist()
         self.timer_a = QTimer(self)
@@ -46,12 +52,12 @@ class DAA_Form1(QMainWindow):
         self.start_timer()
     
     def start_timer(self):
-        self.timer_a.start(500)
+        self.timer_a.start(1000)
     def stop_timer(self):
         self.timer_a.stop()
 
     def load_lon_lat(self):
-        if self.count > len(self.path_lat):
+        if self.count > len(self.path_lat)-1:
             self.timer_a.stop()
         else:
             self.ui.label_13.setText(str(self.path_lon[self.count])+' / '+str(self.path_lat[self.count]))
@@ -72,24 +78,22 @@ class DAA_Form2(QMainWindow):
         url = os.getcwd() +r'\UI\map_gd.html'
         print(url)
         self.browser = QWebEngineView()
-        #self.browser.loadStarted.connect(lambda: print("Loading started"))
-        #self.browser.loadProgress.connect(lambda p: print("Loading progress: {}%".format(p)))
-        #self.browser.loadFinished.connect(lambda: print("Loading finished"))
         self.browser.load(QUrl.fromLocalFile(url))
         self.browser.show()
         self.ui.horizontalLayout.addWidget(self.browser)
-        
+        '''
         self.data_ownship = uav_model_init()
         self.path_lon,self.path_lat,self.path_yaw = backend()    
         self.path_lon = self.path_lon.tolist()    # 经度序列
         self.path_lat = self.path_lat.tolist()    # 纬度序列
         self.path_yaw = self.path_yaw.tolist()    # 本机航向角序列
-        self.timer_a = QTimer(self)
-        self.getPathData()
+        #self.timer_a = QTimer(self)
+        
         #self.timer_a.timeout.connect(self.initOwnshipData)
-        self.count = 0
+        #self.count = 0
         #self.start_timer()
-   
+        '''
+    '''
     def start_timer(self):
         self.timer_a.start(500)
 
@@ -111,33 +115,16 @@ class DAA_Form2(QMainWindow):
             "name" : ownship_ID,
             "path" : path_own_list
         }
-
         path2 = json.dumps([path_data])
         with open('static\path2.json','w') as json_file:
             json_file.write(path2)
-    
-        
+    '''
 
-        
-'''  
-    def import_info_own(self):
-      
-        if self.count > len(self.path_lat):
-            self.timer_a.stop()
-        else:
-            current_lng = float(self.path_lon[self.count])
-            current_lat = float(self.path_lat[self.count])
-            current_yaw = float(self.path_yaw[self.count])
-            print("current_yaw:",current_yaw)
-           
-            self.browser.page().runJavaScript(js_string_own)
-            self.count+=1
-'''
 if __name__=='__main__':
 
     app = QApplication(sys.argv)
-    #form = DAA_Form1()
-    form2 =  DAA_Form2()
-    #form.show()
-    form2.show()
+    form = DAA_Form1()
+    #form2 =  DAA_Form2()
+    form.show()
+    #form2.show()
     sys.exit(app.exec_())
