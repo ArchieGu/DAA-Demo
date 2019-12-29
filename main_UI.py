@@ -36,12 +36,27 @@ class DAA_Form1(QMainWindow):
         self.ui.label_35.setStyleSheet("color:white;")
         self.ui.comboBox_2.setStyleSheet("color:white;")
         self.ui.comboBox.setStyleSheet("color:white;")
+        self.ui.label_37.setStyleSheet("color:white;")
+        self.ui.label_38.setStyleSheet("color:white;")
+        self.ui.label_39.setStyleSheet("color:white;")
+        self.ui.label_40.setStyleSheet("color:white;")
+        self.ui.label_41.setStyleSheet("color:white;")
+        self.ui.label_42.setStyleSheet("color:white;")
+        self.ui.label_43.setStyleSheet("color:white;")
+        self.ui.label_44.setStyleSheet("color:white;")
+        self.ui.label_45.setStyleSheet("color:white;")
 
 
 
         self.Ownship = uav_model_init()
+        self.alt = self.Ownship.alt
+        self.speed = self.Ownship.speed
+        self.heading = round(float(self.Ownship.heading) + 360.0,1)
 
-        self.ui.label_3.setPixmap(QtGui.QPixmap("UI\pic/1.png"))
+        self.ui.label_3.setPixmap(QPixmap("UI\compass/"+str(self.heading)+'.png'))
+        self.ui.label_16.setText(str(self.alt)+'ft')
+        self.ui.label_17.setText(str(self.speed)+'m/s')
+
         self.path_lon,self.path_lat,self.path_yaw = backend()
         self.path_lon = self.path_lon.tolist()
         self.path_lat = self.path_lat.tolist()
@@ -52,7 +67,7 @@ class DAA_Form1(QMainWindow):
         self.start_timer()
     
     def start_timer(self):
-        self.timer_a.start(1000)
+        self.timer_a.start(2000)
     def stop_timer(self):
         self.timer_a.stop()
 
@@ -75,12 +90,14 @@ class DAA_Form2(QMainWindow):
         self.ui.frame_2.setStyleSheet("background:black;")
         self.ui.frame_3.setStyleSheet("background:black;")
         
-        url = os.getcwd() +r'\UI\map_gd.html'
-        print(url)
+        url = os.getcwd() +r'\map_gd.html'
+        #print(url)
         self.browser = QWebEngineView()
-        self.browser.load(QUrl.fromLocalFile(url))
+        self.browser.load(QUrl('http://127.0.0.1:9099/map_gd'))
+        #self.browser.load(QUrl.fromLocalFile(url))
         self.browser.show()
         self.ui.horizontalLayout.addWidget(self.browser)
+        
         '''
         self.data_ownship = uav_model_init()
         self.path_lon,self.path_lat,self.path_yaw = backend()    
@@ -124,7 +141,7 @@ if __name__=='__main__':
 
     app = QApplication(sys.argv)
     form = DAA_Form1()
-    #form2 =  DAA_Form2()
+    form2 =  DAA_Form2()
     form.show()
-    #form2.show()
+    form2.show()
     sys.exit(app.exec_())

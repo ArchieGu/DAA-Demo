@@ -186,7 +186,7 @@ def uav_model_init():
     print("\nGive the initial conditions for your aircraft:\n")
     while(True):
         print('Would you like to use the default values?\n')
-        Ownship = aircraft('QFA50',666,'A',117.84167359617524,38.94488085591196,22000,-118.04390959391104,2000)
+        Ownship = aircraft('QFA50',666,'A',117.84167359617524,38.94488085591196,8886,-118.04390959391104,560)
         print('Ownship ICAO:',Ownship.ICAO)
         print('Ownship ID:',Ownship.ID)
         print('Ownship Mode:',Ownship.mode)

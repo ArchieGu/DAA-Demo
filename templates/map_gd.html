@@ -45,7 +45,8 @@
             });
         });
         
-        $.getJSON('https://raw.githubusercontent.com/ArchieGu/TCAS-simulator/master/pos_gd.json', function (data) {
+        //$.getJSON('https://raw.githubusercontent.com/ArchieGu/TCAS-simulator/master/pos_gd.json', function (data) {
+        $.getJSON('/static/pos_gd.json',function(data){
             var layer = new Loca.PolygonLayer({
                 map: map,
                 fitView: true
@@ -128,8 +129,8 @@
 
                 $('<div id="loadingTip">加载数据，请稍候...</div>').appendTo(document.body);
 
-                $.getJSON('https://raw.githubusercontent.com/ArchieGu/TCAS-simulator/master/path2.json', function(d) {
-
+                //$.getJSON('https://raw.githubusercontent.com/ArchieGu/TCAS-simulator/master/path2.json', function(d) {
+                $.getJSON('/static/path2.json',function(d){
                     $('#loadingTip').remove();
 
                     pathSimplifierIns.setData(d);
