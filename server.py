@@ -1,5 +1,5 @@
 import json 
-from flask import Flask, request, jsonify 
+from flask import Flask, request, jsonify, render_template
 import argparse
 from BackEnd.Path.Map.utils import calculate_path
 from flask_cors import *
@@ -24,6 +24,7 @@ def cal_path():
         'data': path 
     })
 
+
 @app.route('/file/<filename>')
 def file(filename):
     file = os.path.join('static', filename)
@@ -39,6 +40,10 @@ def file(filename):
     res.headers['Access-Control-Allow-Headers'] = 'x-requested-with,content-type'
     return res
 
+
+@app.route('/map_gd')
+def map_gd():
+    return render_template('map_gd.html')
 
 
 if __name__ == '__main__':
